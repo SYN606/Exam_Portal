@@ -31,7 +31,7 @@ def start_exam(request, exam_id):
     else:
         form = ParticipantForm()
 
-    return render(request, 'exam/participant_form.html', {  # ✅ FIXED TEMPLATE NAME
+    return render(request, 'exam/participant_form.html', {  
         'form': form,
         'exam': exam
     })
@@ -63,7 +63,7 @@ def submit_exam(request):
             "is_correct": correct
         })
 
-    # ✅ Ensure score is only saved if model has a `score` field
+    
     if participant_id:
         try:
             participant = Participant.objects.get(id=participant_id)
