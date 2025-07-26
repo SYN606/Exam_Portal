@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Exam - {{ exam.title }}</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background: #f9f9f9; }
+        form { background: white; padding: 20px; border-radius: 8px; width: 300px; margin: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #4CAF50; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Enter Your Details to Start Exam</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Start {{ exam.title }}</button>
+    </form>
+</body>
+</html>
