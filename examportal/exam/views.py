@@ -8,9 +8,9 @@ from .models import Exam, Question, Participant
 from .forms import ParticipantForm
 
 def home(request):
-    exams = Exam.objects.all()
+    # ✅ Show only visible exams
+    exams = Exam.objects.filter(visible=True)
     return render(request, 'exam/home.html', {'exams': exams})
-
 
 def start_exam(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
@@ -35,7 +35,6 @@ def start_exam(request, exam_id):
         'form': form,
         'exam': exam
     })
-
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -63,7 +62,6 @@ def submit_exam(request):
             "is_correct": correct
         })
 
-    
     if participant_id:
         try:
             participant = Participant.objects.get(id=participant_id)

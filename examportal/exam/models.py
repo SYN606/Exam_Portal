@@ -5,6 +5,7 @@ class Exam(models.Model):
     description = models.TextField()
     total_questions = models.IntegerField()
     duration = models.IntegerField(help_text="Duration in minutes")
+    visible = models.BooleanField(default=True)  # ✅ NEW FIELD
 
     def __str__(self):
         return self.title
