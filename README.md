@@ -1,6 +1,6 @@
 # 📝 Exam Portal
 
-**Exam Portal** is a Django-based web application that allows users to take exams online. Admins can create exams, add questions, and manage participant data. Participants can register, take exams, and receive automatic results.
+**Exam Portal** is a Django-based web application that allows users to take exams online. Admins can create exams, add questions, and manage participant data. Participants can register, take exams, and receive automatic results. I Created for My o level Students.
 
 ## 🚀 Features
 
