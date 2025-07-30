@@ -6,8 +6,7 @@ class ExamAdmin(admin.ModelAdmin):
     list_display = ('title', 'visible', 'total_questions', 'duration')
     list_filter = ('visible',)
     search_fields = ('title',)
-    list_editable = ('visible',)  # ✅ allows toggle directly in list view
-
+    list_editable = ('visible',)
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
@@ -17,6 +16,10 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'mobile', 'exam', 'started_at')
+    list_display = ('name', 'mobile', 'exam', 'score', 'exam_date')
     list_filter = ('exam',)
     search_fields = ('name', 'mobile')
+
+    def exam_date(self, obj):
+        return obj.started_at.date()
+    exam_date.short_description = 'Date'

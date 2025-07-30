@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
@@ -26,12 +26,13 @@ def start_exam(request, exam_id):
             return render(request, 'exam/exam_page.html', {
                 'exam': exam,
                 'questions': questions,
-                'participant_id': participant.id
+                'participant_id': participant.id,  # ✅ send to template
+                'duration_minutes': exam.duration
             })
     else:
         form = ParticipantForm()
 
-    return render(request, 'exam/participant_form.html', {  
+    return render(request, 'exam/participant_form.html', {
         'form': form,
         'exam': exam
     })
@@ -44,10 +45,13 @@ def submit_exam(request):
     exam_id = data.get("exam_id")
     participant_id = data.get("participant_id")
 
-    exam = Exam.objects.get(id=exam_id)
-    questions = Question.objects.filter(exam=exam)
-    score = 0
+    try:
+        exam = Exam.objects.get(id=exam_id)
+        questions = Question.objects.filter(exam=exam)
+    except Exam.DoesNotExist:
+        return JsonResponse({"error": "Invalid exam ID"}, status=400)
 
+    score = 0
     detailed_results = []
 
     for i, question in enumerate(questions):
@@ -62,14 +66,13 @@ def submit_exam(request):
             "is_correct": correct
         })
 
-    if participant_id:
-        try:
-            participant = Participant.objects.get(id=participant_id)
-            if hasattr(participant, 'score'):
-                participant.score = score
-                participant.save()
-        except Participant.DoesNotExist:
-            pass
+    # ✅ Update participant score
+    try:
+        participant = Participant.objects.get(id=participant_id)
+        participant.score = score
+        participant.save()
+    except Participant.DoesNotExist:
+        return JsonResponse({"error": "Participant not found"}, status=400)
 
     return JsonResponse({
         "message": "Exam submitted successfully",

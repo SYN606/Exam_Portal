@@ -5,7 +5,7 @@ class Exam(models.Model):
     description = models.TextField()
     total_questions = models.IntegerField()
     duration = models.IntegerField(help_text="Duration in minutes")
-    visible = models.BooleanField(default=True)  # ✅ NEW FIELD
+    visible = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -26,6 +26,7 @@ class Participant(models.Model):
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=15)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)  # ✅ New field
     started_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -3,103 +3,26 @@
 <head>
     <title>{{ exam.title }}</title>
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f0f2f5;
-        }
-        .navbar {
-            background-color: #4a90e2;
-            color: white;
-            padding: 15px 30px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .main-container {
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-        .left-pane {
-            flex: 3;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-        .right-pane {
-            flex: 1;
-            background: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            height: fit-content;
-        }
-        h2 {
-            color: #333;
-        }
-        .timer-box {
-            font-size: 18px;
-            font-weight: bold;
-            color: #d9534f;
-            margin-bottom: 15px;
-        }
-        .question-box {
-            margin-bottom: 20px;
-        }
-        .option {
-            margin: 10px 0;
-        }
-        label {
-            cursor: pointer;
-        }
-        .btn {
-            padding: 10px 20px;
-            font-size: 15px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-save {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-save:hover {
-            background-color: #218838;
-        }
-        .btn-finish {
-            background-color: #007bff;
-            color: white;
-            margin-top: 20px;
-        }
-        .btn-finish:hover {
-            background-color: #0056b3;
-        }
-        .question-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .question-nav button {
-            width: 40px;
-            height: 40px;
-            font-weight: bold;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            cursor: pointer;
-        }
-        .question-nav button:hover {
-            background-color: #d9edf7;
-        }
-        #result {
-            margin-top: 20px;
-            background: #e6ffe6;
-            padding: 15px;
-            border: 1px solid #66cc66;
-            border-radius: 8px;
-        }
+        /* Styles unchanged */
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
+        .navbar { background-color: #4a90e2; color: white; padding: 15px 30px; font-size: 24px; font-weight: bold; }
+        .main-container { display: flex; padding: 20px; gap: 20px; }
+        .left-pane { flex: 3; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        .right-pane { flex: 1; background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.05); height: fit-content; }
+        h2 { color: #333; }
+        .timer-box { font-size: 18px; font-weight: bold; color: #d9534f; margin-bottom: 15px; }
+        .question-box { margin-bottom: 20px; }
+        .option { margin: 10px 0; }
+        label { cursor: pointer; }
+        .btn { padding: 10px 20px; font-size: 15px; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-save { background-color: #28a745; color: white; }
+        .btn-save:hover { background-color: #218838; }
+        .btn-finish { background-color: #007bff; color: white; margin-top: 20px; }
+        .btn-finish:hover { background-color: #0056b3; }
+        .question-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+        .question-nav button { width: 40px; height: 40px; font-weight: bold; border-radius: 6px; border: 1px solid #ccc; background-color: #f9f9f9; cursor: pointer; }
+        .question-nav button:hover { background-color: #d9edf7; }
+        #result { margin-top: 20px; background: #e6ffe6; padding: 15px; border: 1px solid #66cc66; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -115,22 +38,11 @@
             <div class="question-box">
                 <p id="qnumber"><strong>Q1</strong></p>
                 <p id="qtext">Loading question...</p>
-                <div class="option">
-                    <input type="radio" id="optA" name="option" value="A">
-                    <label for="optA" id="labelA">A. Option A</label>
-                </div>
-                <div class="option">
-                    <input type="radio" id="optB" name="option" value="B">
-                    <label for="optB" id="labelB">B. Option B</label>
-                </div>
-                <div class="option">
-                    <input type="radio" id="optC" name="option" value="C">
-                    <label for="optC" id="labelC">C. Option C</label>
-                </div>
-                <div class="option">
-                    <input type="radio" id="optD" name="option" value="D">
-                    <label for="optD" id="labelD">D. Option D</label>
-                </div>
+                <div class="option"><input type="radio" id="optA" name="option" value="A"><label for="optA" id="labelA">A. Option A</label></div>
+                <div class="option"><input type="radio" id="optB" name="option" value="B"><label for="optB" id="labelB">B. Option B</label></div>
+                <div class="option"><input type="radio" id="optC" name="option" value="C"><label for="optC" id="labelC">C. Option C</label></div>
+                <div class="option"><input type="radio" id="optD" name="option" value="D"><label for="optD" id="labelD">D. Option D</label></div>
+
                 <button class="btn btn-save" onclick="saveAnswer()">Save & Next</button>
                 <button class="btn btn-finish" onclick="submitExam()">✅ Finish Exam</button>
             </div>
@@ -143,9 +55,7 @@
             <h3>📌 Choose Question</h3>
             <div class="question-nav">
                 {% for q in questions %}
-                    <button id="btn{{ forloop.counter0 }}" onclick="showQuestion({{ forloop.counter0 }})">
-                        {{ forloop.counter }}
-                    </button>
+                    <button id="btn{{ forloop.counter0 }}" onclick="showQuestion({{ forloop.counter0 }})">{{ forloop.counter }}</button>
                 {% endfor %}
             </div>
         </div>
@@ -200,7 +110,8 @@
                 },
                 body: JSON.stringify({
                     answers: userAnswers,
-                    exam_id: {{ exam.id }}
+                    exam_id: {{ exam.id }},
+                    participant_id: {{ participant_id }}  // ✅ sending participant_id
                 })
             })
             .then(response => response.json())
@@ -214,21 +125,21 @@
         }
 
         // ⏰ Timer Setup
-       let timeLeft = {{ exam.duration }} * 60; // ✅ Use dynamic duration set in admin panel
-    const timerElement = document.getElementById("timer");
-    const timerInterval = setInterval(() => {
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        timeLeft--;
-        if (timeLeft < 0) {
-            clearInterval(timerInterval);
-            alert("⏰ Time is up! Submitting exam.");
-            submitExam();
-        }
-    }, 1000);
+        let timeLeft = {{ exam.duration }} * 60;
+        const timerElement = document.getElementById("timer");
+        const timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            timeLeft--;
+            if (timeLeft < 0) {
+                clearInterval(timerInterval);
+                alert("⏰ Time is up! Submitting exam.");
+                submitExam();
+            }
+        }, 1000);
 
-        // 👇 Automatically show first question on load
+        // 👇 Load first question
         window.onload = () => {
             if (questions.length > 0) {
                 showQuestion(0);
