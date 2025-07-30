@@ -1,0 +1,53 @@
+text,option_a,option_b,option_c,option_d,correct_option
+What does IoT stand for?,Internet of Tasks,Internet of Things,Integration of Technology,Interface of Tools,B
+Which of the following is a key component of IoT?,Mobile phones,IoT sensors,Databases,Web browsers,B
+Which protocol is commonly used in IoT?,SMTP,HTTP,MQTT,FTP,C
+Which layer handles physical devices in IoT?,Network Layer,Perception Layer,Application Layer,Transport Layer,B
+Which of these is not a communication protocol?,Zigbee,Bluetooth,SQL,NFC,C
+Which cloud platform supports IoT?,AWS IoT,Google Docs,WordPress,GitHub,A
+Which of the following is not an IoT device?,Smartwatch,Smart TV,Toaster with no sensors,Smart thermostat,C
+What does MQTT stand for?,Message Queue Telemetry Transport,Mobile Queue Transfer Technology,Modern Query Telemetry Tool,Multiple Queue Tech Tracker,A
+Which sensor is used to detect temperature?,IR sensor,Gyroscope,Accelerometer,DS18B20,D
+Which of these microcontrollers is widely used in IoT?,Arduino,Core i9,Intel Xeon,Ryzen 5,A
+Which of these is used for local IoT communication?,Wi-Fi,Zigbee,Bluetooth,All of the above,D
+Which layer ensures secure data transmission?,Perception Layer,Security Layer,Application Layer,Data Layer,B
+Which of these is an open-source IoT platform?,Google Cloud,Amazon Alexa,ThingsBoard,Azure,C
+Which protocol is lightweight and used for constrained devices?,HTTP,FTP,MQTT,SMTP,C
+Which one is a characteristic of IoT devices?,Manual Operation,Limited Connectivity,Low Power Consumption,High Graphics Usage,C
+Which one is not an IoT architecture layer?,Perception Layer,Transmission Layer,Security Layer,Data Link Layer,D
+IoT devices are mostly connected to...,Servers,Mobile apps,Internet,Television,C
+Which of the following uses IoT?,Smart farming,Online gaming,E-commerce coding,Word Processing,A
+Which company developed Raspberry Pi?,Apple,Microsoft,ARM,UK Raspberry Pi Foundation,D
+What is used to store sensor data in IoT?,RAM,Hard Drive,Cloud,Cache,C
+Which of these is a cloud IoT service?,Google Cloud IoT Core,Facebook Live,Zoom Meeting,WhatsApp Web,A
+In smart homes, IoT can be used for...,Only Wi-Fi,Lighting & Heating,Only Gaming,Cooking Only,B
+IoT devices are identified by...,IP Address,MAC Address,URL,Device Name,A
+What is the function of a gateway in IoT?,Connect to internet,Block traffic,Filter ads,Display web pages,A
+Which programming language is widely used in IoT?,Python,Java,C++,All of the above,D
+Which is an example of an actuator?,Temperature sensor,Light sensor,Servo motor,Humidity sensor,C
+Which layer includes RFID, sensors, etc.?,Application Layer,Network Layer,Perception Layer,Control Layer,C
+What does RFID stand for?,Radio Frequency Identification,Remote Field Integration Device,Radio Field ID,Radio File Info Device,A
+Which of the following is not a benefit of IoT?,Automation,Data Collection,Complex Manual Process,Remote Monitoring,C
+Which one is an IoT communication model?,Push-Pull,Pull-Pull,Push-Only,Send-Receive,A
+Which device is used to measure humidity?,DHT11,LM35,DS18B20,PIR Sensor,A
+IoT is an integration of...,Hardware,Software,Networking,All of the above,D
+Which protocol is used for secure web communication?,HTTP,MQTT,HTTPS,FTP,C
+What is latency in IoT?,Delay in data transfer,Sensor damage,High temperature,Connectivity error,A
+Edge computing in IoT is used to...,Transfer data quickly,Secure data in cloud,Process data near device,Turn off devices,C
+Which of the following is an IoT application?,Smart Irrigation,Online Exams,Document Scanning,Video Editing,A
+Which sensor detects motion?,DS18B20,PIR Sensor,Ultrasonic sensor,LDR,B
+Which board has built-in WiFi for IoT?,Arduino Uno,ESP8266,MSI Motherboard,Raspberry Pi Zero,B
+Which of these is a security threat to IoT?,Firewall,Malware,Backup,Encryption,B
+Which standard supports IPv6 for IoT?,IEEE 802.11,6LoWPAN,802.3,USB 2.0,B
+IoT data is mostly...,Structured,Unstructured,Compressed,Encrypted,B
+Which IoT layer includes applications like smart cities?,Network Layer,Application Layer,Transport Layer,Perception Layer,B
+Which one of these is a wearable IoT device?,Smart fridge,Smartwatch,Smart TV,Smart Fan,B
+In agriculture, IoT helps in...,Video calling,Online billing,Monitoring soil & weather,Digital marketing,C
+Which of the following is a light sensor?,LDR,DHT11,PIR,IR,A
+IoT devices are usually...,Battery powered,AC powered,Both,None,A
+Which IoT platform is from Microsoft?,Azure IoT Hub,AWS IoT Core,Thingspeak,ThingsBoard,A
+Which of these is not a sensor?,Accelerometer,LDR,Speaker,Ultrasonic Sensor,C
+What is the role of IoT in healthcare?,Entertainment,Remote patient monitoring,Music streaming,Designing websites,B
+What does smart parking use?,Water sensors,Light sensors,Proximity and IoT sensors,Keyboards,C
+Which of the following is used in smart cities?,E-ink displays,Temperature sensors,Connected street lights,Desktop PCs,C
+Which data type is handled in real-time by IoT?,Text,Audio,Sensor data,Games,C

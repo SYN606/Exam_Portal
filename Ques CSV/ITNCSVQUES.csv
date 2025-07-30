@@ -1,0 +1,49 @@
+text,option_a,option_b,option_c,option_d,correct_option
+What does LAN stand for?,Local Area Network,Large Area Network,Long Area Network,Limited Area Network,A
+Which device is used to connect different networks together?,Switch,Router,Hub,Bridge,B
+Which protocol is used for sending emails?,FTP,SMTP,HTTP,TCP,B
+What is the full form of IP?,Internet Provider,Internet Protocol,Internal Protocol,Interface Protocol,B
+Which of the following is not a web browser?,Chrome,Firefox,Windows,Edge,C
+What is the function of a firewall?,Virus scanning,Blocking unwanted access,Data compression,Website creation,B
+Which command is used to test network connectivity?,ping,trace,netstat,ipconfig,A
+What does URL stand for?,Universal Resource Locator,Uniform Resource Locator,Unified Resource Locator,Universal Reference Link,B
+What does HTTP stand for?,Hyper Text Transfer Protocol,High Transfer Text Protocol,Hyper Transfer Text Protocol,Host Transfer Text Protocol,A
+What does ISP stand for?,Internet Speed Provider,Internet Server Provider,Internet Service Provider,Internal Service Provider,C
+Which of these is not an operating system?,Windows,MacOS,Linux,Oracle,D
+Which software is used to create documents?,Photoshop,MS Word,AutoCAD,Chrome,B
+Which device amplifies or regenerates signals in a network?,Hub,Switch,Repeater,Router,C
+Which topology connects all devices in a single line?,Star,Ring,Bus,Mesh,C
+What is the default port of HTTP?,21,80,443,25,B
+Which protocol is secure: HTTP or HTTPS?,HTTP,HTTPS,Both,None,B
+What is the full form of DNS?,Domain Name Server,Domain Number System,Digital Network System,Data Name Server,A
+Which of the following is a programming language?,Python,Google,Gmail,Excel,A
+Which application is used for spreadsheets?,MS Word,MS Excel,MS PowerPoint,Notepad,B
+Which memory is volatile?,RAM,ROM,Hard Disk,DVD,A
+Which is a cloud storage service?,Dropbox,Outlook,Slack,Chrome,A
+What is phishing?,Fishing online,Fake websites for fraud,Email hacking,Malware sending,B
+Which network device learns MAC addresses?,Router,Switch,Repeater,Hub,B
+Which of these is used to protect networks?,Antivirus,Firewall,VPN,Proxy,B
+Which is an example of an input device?,Monitor,Printer,Mouse,Speaker,C
+Which is an example of an output device?,Keyboard,Mouse,Monitor,Scanner,C
+Which software is used to compress files?,WinRAR,MS Word,Excel,Chrome,A
+Which unit measures internet speed?,Mbps,GHz,MB,Kbps,A
+What does GUI stand for?,Graphical User Interface,General User Interface,Global User Interface,Generic UI,A
+What is Open Source software?,Paid software,Free to view only,Free to use and modify,Subscription-based,C
+Which of the following is a video conferencing tool?,VLC,Zoom,Photoshop,MS Word,B
+What does SSD stand for?,Solid State Drive,Secure Storage Device,System Software Drive,Safe System Device,A
+Which command shows the IP address in Windows?,ping,ipconfig,tracert,nslookup,B
+Which of the following is a Linux OS?,Ubuntu,Photoshop,Chrome,Excel,A
+What does VPN stand for?,Virtual Protocol Network,Virtual Private Network,Verified Personal Network,Virtual Protection Node,B
+Which one is used for website creation?,MS Word,Notepad++,Photoshop,Excel,B
+Which of the following is not a programming language?,Java,Python,HTML,Google,D
+Which company developed Windows OS?,Apple,Microsoft,Google,IBM,B
+Which one is not a type of computer memory?,RAM,Cache,SSD,USB,D
+What is the brain of the computer?,Hard Drive,CPU,Monitor,Keyboard,B
+What is the main function of the OS?,Store data,Control hardware,Play games,Scan viruses,B
+What is the binary system base?,2,8,10,16,A
+What device provides wireless network access?,Modem,Router,Switch,Firewall,B
+What is the use of Excel?,Email,Drawing,Calculation,Video Editing,C
+Which of these is a domain extension?,.pdf,.exe,.com,.jpg,C
+Which app is used to read PDF?,Photoshop,Acrobat Reader,Excel,MS Paint,B
+Which of these is a text editor?,MS Paint,Notepad,VLC,Chrome,B
+What does MAC in MAC address stand for?,Media Access Control,Machine Access Code,Main Address Control,Media Adapter Code,A
