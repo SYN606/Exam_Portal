@@ -8,7 +8,6 @@
             margin: 0;
             background: #f0f2f5;
         }
-
         .navbar {
             background-color: #4a90e2;
             color: white;
@@ -16,13 +15,11 @@
             font-size: 24px;
             font-weight: bold;
         }
-
         .main-container {
             display: flex;
             padding: 20px;
             gap: 20px;
         }
-
         .left-pane {
             flex: 3;
             background: white;
@@ -30,7 +27,6 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.05);
         }
-
         .right-pane {
             flex: 1;
             background: #fff;
@@ -39,30 +35,24 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.05);
             height: fit-content;
         }
-
         h2 {
             color: #333;
         }
-
         .timer-box {
             font-size: 18px;
             font-weight: bold;
             color: #d9534f;
             margin-bottom: 15px;
         }
-
         .question-box {
             margin-bottom: 20px;
         }
-
         .option {
             margin: 10px 0;
         }
-
         label {
             cursor: pointer;
         }
-
         .btn {
             padding: 10px 20px;
             font-size: 15px;
@@ -71,32 +61,26 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         .btn-save {
             background-color: #28a745;
             color: white;
         }
-
         .btn-save:hover {
             background-color: #218838;
         }
-
         .btn-finish {
             background-color: #007bff;
             color: white;
             margin-top: 20px;
         }
-
         .btn-finish:hover {
             background-color: #0056b3;
         }
-
         .question-nav {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-
         .question-nav button {
             width: 40px;
             height: 40px;
@@ -106,11 +90,9 @@
             background-color: #f9f9f9;
             cursor: pointer;
         }
-
         .question-nav button:hover {
             background-color: #d9edf7;
         }
-
         #result {
             margin-top: 20px;
             background: #e6ffe6;
@@ -128,7 +110,7 @@
         <!-- Left pane -->
         <div class="left-pane">
             <h2>{{ exam.title }}</h2>
-            <div class="timer-box">⏰ Time Left: <span id="timer">10:00</span></div>
+            <div class="timer-box">⏰ Time Left: <span id="timer">--:--</span></div>
 
             <div class="question-box">
                 <p id="qnumber"><strong>Q1</strong></p>
@@ -203,54 +185,54 @@
         }
 
         function submitExam() {
-    saveAnswer();
-    clearInterval(timerInterval);
+            saveAnswer();
+            clearInterval(timerInterval);
 
-    // Disable all inputs and buttons
-    document.querySelectorAll('input[name="option"]').forEach(el => el.disabled = true);
-    document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
-    document.querySelectorAll('.question-nav button').forEach(btn => btn.disabled = true);
+            document.querySelectorAll('input[name="option"]').forEach(el => el.disabled = true);
+            document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
+            document.querySelectorAll('.question-nav button').forEach(btn => btn.disabled = true);
 
-    fetch("{% url 'submit_exam' %}", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            answers: userAnswers,
-            exam_id: {{ exam.id }}
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("result").innerHTML =
-            `<h3>✅ Result:</h3>
-            <p><b>Total Questions:</b> ${data.total}</p>
-            <p><b>Correct Answers:</b> ${data.correct}</p>
-            <p><b>Wrong Answers:</b> ${data.wrong}</p>`;
-    });
-}
+            fetch("{% url 'submit_exam' %}", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    answers: userAnswers,
+                    exam_id: {{ exam.id }}
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML =
+                    `<h3>✅ Result:</h3>
+                    <p><b>Total Questions:</b> ${data.total}</p>
+                    <p><b>Correct Answers:</b> ${data.correct}</p>
+                    <p><b>Wrong Answers:</b> ${data.wrong}</p>`;
+            });
+        }
 
+        // ⏰ Timer Setup
+       let timeLeft = {{ exam.duration }} * 60; // ✅ Use dynamic duration set in admin panel
+    const timerElement = document.getElementById("timer");
+    const timerInterval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(timerInterval);
+            alert("⏰ Time is up! Submitting exam.");
+            submitExam();
+        }
+    }, 1000);
 
-        // Timer Script
-        let timeLeft = 600;
-        const timerElement = document.getElementById("timer");
-        const timerInterval = setInterval(() => {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            timeLeft--;
-
-            if (timeLeft < 0) {
-                clearInterval(timerInterval);
-                alert("⏰ Time is up! Submitting exam.");
-                submitExam();
+        // 👇 Automatically show first question on load
+        window.onload = () => {
+            if (questions.length > 0) {
+                showQuestion(0);
             }
-        }, 1000);
-
-        window.onload = function () {
-            showQuestion(0);
         };
     </script>
 
