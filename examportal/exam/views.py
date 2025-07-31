@@ -5,11 +5,10 @@ from django.views.decorators.http import require_http_methods
 import json
 import random
 
-from .models import Exam, Question, Participant
+from .models import Exam, Question, Participant, ParticipantAnswer
 from .forms import ParticipantForm
 
 def home(request):
-    # ✅ Show only visible exams
     exams = Exam.objects.filter(visible=True)
     return render(request, 'exam/home.html', {'exams': exams})
 
@@ -20,22 +19,50 @@ def start_exam(request, exam_id):
     if request.method == 'POST':
         form = ParticipantForm(request.POST)
         if form.is_valid():
-            participant = form.save(commit=False)
-            participant.exam = exam
-            participant.save()
+            name = form.cleaned_data['name']
+            mobile = form.cleaned_data['mobile']
 
-            # ✅ Get and shuffle questions
-            questions = list(Question.objects.filter(exam=exam).values())
-            random.shuffle(questions)
+            # ✅ Reuse participant if already exists
+            participant, created = Participant.objects.get_or_create(
+                name=name, mobile=mobile, exam=exam
+            )
 
-            # ✅ Save order in session to match during submit
-            request.session[f"exam_{participant.id}_questions"] = [q['id'] for q in questions]
+            if created:
+                # New participant: shuffle and save question order
+                questions = list(Question.objects.filter(exam=exam))
+                random.shuffle(questions)
+                for q in questions:
+                    ParticipantAnswer.objects.get_or_create(participant=participant, question=q)
+            else:
+                # Existing participant: use stored question order
+                questions = [
+                    a.question for a in ParticipantAnswer.objects
+                    .filter(participant=participant).select_related('question')
+                ]
+
+            # ✅ Prepare question data
+            question_data = [{
+                'id': q.id,
+                'text': q.text,
+                'option_a': q.option_a,
+                'option_b': q.option_b,
+                'option_c': q.option_c,
+                'option_d': q.option_d,
+            } for q in questions]
+
+            # ✅ Get saved answers to restore selected options
+            saved_answers = {
+                a.question.id: a.selected_option
+                for a in ParticipantAnswer.objects.filter(participant=participant)
+                if a.selected_option
+            }
 
             return render(request, 'exam/exam_page.html', {
                 'exam': exam,
-                'questions': questions,
+                'questions': question_data,
                 'participant_id': participant.id,
-                'duration_minutes': exam.duration
+                'duration_minutes': exam.duration,
+                'saved_answers': saved_answers
             })
     else:
         form = ParticipantForm()
@@ -51,52 +78,70 @@ def start_exam(request, exam_id):
 def submit_exam(request):
     data = json.loads(request.body)
     answers = data.get("answers", {})
-    exam_id = data.get("exam_id")
     participant_id = data.get("participant_id")
 
     try:
-        exam = Exam.objects.get(id=exam_id)
-        question_ids = request.session.get(f"exam_{participant_id}_questions", [])
-        questions = list(Question.objects.filter(id__in=question_ids))
-    except Exam.DoesNotExist:
-        return JsonResponse({"error": "Invalid exam ID"}, status=400)
-
-    # Rebuild question dict for lookup by ID
-    question_dict = {str(q.id): q for q in questions}
+        participant = Participant.objects.get(id=participant_id)
+        answers_qs = ParticipantAnswer.objects.filter(participant=participant).select_related('question')
+    except Participant.DoesNotExist:
+        return JsonResponse({"error": "Participant not found"}, status=400)
 
     score = 0
     attempted = 0
     detailed_results = []
 
-    for index, qid in enumerate(question_ids):
-        q = question_dict.get(str(qid))
-        if q:
-            user_answer = answers.get(str(index))
-            if user_answer:  # ✅ Count as attempted if answer exists
-                attempted += 1
-            correct = (user_answer == q.correct_option)
-            if correct:
-                score += 1
-            detailed_results.append({
-                "question": q.text,
-                "your_answer": user_answer,
-                "correct_answer": q.correct_option,
-                "is_correct": correct
-            })
+    for idx, answer_obj in enumerate(answers_qs):
+        question = answer_obj.question
+        user_answer = answers.get(str(idx))  # index from frontend
 
-    # ✅ Update participant score
-    try:
-        participant = Participant.objects.get(id=participant_id)
-        participant.score = score
-        participant.save()
-    except Participant.DoesNotExist:
-        return JsonResponse({"error": "Participant not found"}, status=400)
+        if user_answer:
+            attempted += 1
+            answer_obj.selected_option = user_answer
+            answer_obj.save()
+
+        correct = (user_answer == question.correct_option)
+        if correct:
+            score += 1
+
+        detailed_results.append({
+            "question": question.text,
+            "your_answer": user_answer,
+            "correct_answer": question.correct_option,
+            "is_correct": correct
+        })
+
+    participant.score = score
+    participant.save()
 
     return JsonResponse({
         "message": "Exam submitted successfully",
-        "total": len(questions),
+        "total": len(answers_qs),
         "attempted": attempted,
         "correct": score,
-        "wrong": len(questions) - score,
+        "wrong": len(answers_qs) - score,
         "details": detailed_results
     })
+
+
+# ✅ NEW: Save individual answer (used in AJAX call from exam_page.html)
+@csrf_exempt
+@require_http_methods(["POST"])
+def save_answer(request):
+    try:
+        data = json.loads(request.body)
+        participant_id = data.get("participant_id")
+        question_id = data.get("question_id")
+        selected_option = data.get("selected_option")
+
+        participant = Participant.objects.get(id=participant_id)
+        question = Question.objects.get(id=question_id)
+
+        answer_obj, created = ParticipantAnswer.objects.get_or_create(
+            participant=participant, question=question
+        )
+        answer_obj.selected_option = selected_option
+        answer_obj.save()
+
+        return JsonResponse({"message": "Answer saved successfully"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)

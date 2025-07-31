@@ -166,10 +166,22 @@
     let currentIndex = 0;
     let questions = {{ questions|safe }};
     let userAnswers = {};
+    let savedAnswers = {{ saved_answers|safe }};  // <-- Comes from Django
     let canSwitch = true;
     let questionCountdown = 10;
     let questionTimer;
     const perQuestionTimerDisplay = document.getElementById("perQuestionTimer");
+
+    // Pre-fill saved answers and button highlights
+    function preloadAnswers() {
+        questions.forEach((q, idx) => {
+            if (savedAnswers[q.id]) {
+                userAnswers[idx] = savedAnswers[q.id];
+                const btn = document.getElementById("btn" + idx);
+                if (btn) btn.style.backgroundColor = "lightgreen";
+            }
+        });
+    }
 
     function startQuestionCountdown() {
         clearInterval(questionTimer);
@@ -224,7 +236,22 @@
         if (selected) {
             userAnswers[currentIndex] = selected.value;
             document.getElementById("btn" + currentIndex).style.backgroundColor = "lightgreen";
+
+            // ✅ Send to backend immediately (AJAX auto-save)
+            fetch("{% url 'save_answer' %}", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    participant_id: {{ participant_id }},
+                    question_id: questions[currentIndex].id,
+                    selected_option: selected.value
+                })
+            });
         }
+
         if (currentIndex + 1 < questions.length) {
             showQuestion(currentIndex + 1);
         }
@@ -262,7 +289,7 @@
         });
     }
 
-    // Global timer
+    // Global exam timer
     let timeLeft = {{ exam.duration }} * 60;
     const timerElement = document.getElementById("timer");
     const timerInterval = setInterval(() => {
@@ -278,6 +305,7 @@
     }, 1000);
 
     window.onload = () => {
+        preloadAnswers();  // ✅ Load saved answers
         if (questions.length > 0) {
             showQuestion(0);
         }
@@ -308,6 +336,7 @@
         }
     });
 </script>
+
 
 </body>
 </html>
