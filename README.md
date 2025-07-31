@@ -1,4 +1,4 @@
-<h1>Django Exam Portal</h1>
+# 📝 Django Exam Portal
 <hr><p>A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.</p><h2>General Information</h2>
 <hr><ul>
 <li>Exam Portal</li>
