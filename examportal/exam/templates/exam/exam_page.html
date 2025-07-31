@@ -131,7 +131,6 @@
     let questions = {{ questions|safe }};
     let userAnswers = {};
     let canSwitch = true;
-
     let questionCountdown = 10;
     let questionTimer;
     const perQuestionTimerDisplay = document.getElementById("perQuestionTimer");
@@ -140,7 +139,7 @@
         clearInterval(questionTimer);
         questionCountdown = 10;
         lockButtons(true);
-        perQuestionTimerDisplay.innerText = `Wait for : ${questionCountdown}s`;
+        perQuestionTimerDisplay.innerText = `Wait for: ${questionCountdown}s`;
 
         questionTimer = setInterval(() => {
             questionCountdown--;
@@ -172,7 +171,6 @@
         const q = questions[index];
         document.getElementById('qnumber').innerText = "Q" + (index + 1);
         document.getElementById('qtext').innerText = q.text;
-
         document.getElementById('labelA').innerText = "A. " + q.option_a;
         document.getElementById('labelB').innerText = "B. " + q.option_b;
         document.getElementById('labelC').innerText = "C. " + q.option_c;
@@ -227,7 +225,7 @@
         });
     }
 
-    // Global Exam Timer
+    // Global timer
     let timeLeft = {{ exam.duration }} * 60;
     const timerElement = document.getElementById("timer");
     const timerInterval = setInterval(() => {
@@ -242,7 +240,7 @@
         }
     }, 1000);
 
-    // Initial Load
+    // On load
     window.onload = () => {
         if (questions.length > 0) {
             showQuestion(0);
@@ -260,13 +258,11 @@
         }
     };
 
-    // Block right-click and copy/paste
+    // Disable copy/paste/dev tools
     document.addEventListener("contextmenu", e => e.preventDefault());
     ["copy", "cut", "paste"].forEach(evt => {
         document.addEventListener(evt, e => e.preventDefault());
     });
-
-    // Block Shortcut  Tools
     document.addEventListener("keydown", function(e) {
         if (
             e.key === "F12" ||
