@@ -1,128 +1,52 @@
-# 📝 Django Exam Portal
-
-A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.
-
-## 📌 Features
-
-- 🔐 Participant login using name and mobile number
-- 🎯 Multiple exams with visibility toggle
-- 🔄 Resume exam after refresh/server restart
-- ✅ Auto-save answers after every question
-- 📊 Real-time score calculation and result display
-- ⏱ Exam-wide timer + per-question lock timer
-- 🚫 Tab switch detection (auto-submit after 3 warnings)
-- 🔐 No right-click, copy-paste, or Tab switching allowed during exam
-
-## 🛠 Tech Stack
-
-- **Backend**: Django 5.x
-- **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (default, easy to replace with PostgreSQL/MySQL)
-
-## 📂 Project Structure
-
-examportal/
-├── exam/
-│ ├── migrations/
-│ ├── static/
-│ ├── templates/
-│ │ └── exam/
-│ │ ├── home.html
-│ │ ├── participant_form.html
-│ │ └── exam_page.html
-│ ├── init.py
-│ ├── admin.py
-│ ├── apps.py
-│ ├── forms.py
-│ ├── models.py
-│ ├── tests.py
-│ ├── urls.py
-│ └── views.py
-├── examportal/
-│ ├── init.py
-│ ├── asgi.py
-│ ├── settings.py
-│ ├── urls.py
-│ └── wsgi.py
-├── db.sqlite3
-└── manage.py
-## 🛠️ Setup Instructions
-
-
-## 📋 Setup Instructions
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/exam-portal.git
-cd exam-portal```
-
-
-### 2. Create a Virtual Environment (if You want)
-```bash
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-
-
-### 3. Install Dependencies
-
-
-pip install django
-
-
-### 4. Apply Migrations
-
-
-python manage.py makemigrations
-python manage.py migrate
-
-
-### 5. Run the Development Server
-
-
-python manage.py runserver
-
-
-Then open your browser and go to:
-
-```
-http://127.0.0.1:8000/
-```
-
-## 🔑 Admin Access
-
-To access the Django admin panel:
-
-
-python manage.py createsuperuser
-
-
-Then visit:
-
-```
-http://127.0.0.1:8000/admin/
-```
-
-## 📌 Technologies Used
-
-- Python 3
-- Django 5.2
-- SQLite3 (default database)
-- HTML5 / CSS3 (templates)
-
-
-## 💡 Models 
-
-Exam: Title, description, duration, visibility.
-
-Question: Belongs to an Exam. Has 4 options + correct answer.
-
-Participant: Linked to an Exam with name, mobile number, and score.
-
-ParticipantAnswer: Stores per-question answer and allows resume support.
-
-👨‍💻 Author
-Developed by [Aditya Pathak].
-Email: skilldotpy@gmail.com
-GitHub: https://github.com/sde-666
+<h1>Django Exam Portal</h1>
+<hr><p>A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.</p><h2>General Information</h2>
+<hr><ul>
+<li>Exam Portal</li>
+</ul><ul>
+<li>It is for Institutes for conducting Exam Or Assessmen</li>
+</ul><h2>Technologies Used</h2>
+<hr><ul>
+<li>HTML</li>
+</ul><ul>
+<li>CSS</li>
+</ul><ul>
+<li>JavaScript</li>
+</ul><ul>
+<li>Django</li>
+</ul><h2>Features</h2>
+<hr><ul>
+<li>🔐 Participant login using name and mobile number</li>
+</ul><ul>
+<li>🎯 Multiple exams with visibility toggle</li>
+</ul><ul>
+<li>🔄 Resume exam after refresh/server restart</li>
+</ul><ul>
+<li>✅ Auto-save answers after every question</li>
+</ul><ul>
+<li>📊 Real-time score calculation and result display</li>
+</ul><ul>
+<li>⏱ Exam-wide timer + per-question lock timer</li>
+</ul><ul>
+<li>🚫 Tab switch detection (auto-submit after 3 warnings)</li>
+</ul><ul>
+<li>🔐 No right-click, copy-paste, or Tab switching allowed during exam</li>
+</ul><h2>Setup</h2>
+<hr><p>python -m venv venv</p>
+<p>source venv/bin/activate</p>
+<p>venv\Scripts\activate</p>
+<p>pip install -r requirements.txt</p><h5>Steps</h5><ul>
+<li>pip install django</li>
+</ul><h2>Usage</h2>
+<hr><p>Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to improve. .</p><h2>Project Status</h2>
+<hr><p>According to me it is 95% completed</p><h2>Features that can be added</h2>
+<hr><ul>
+<li>Result download in PDF format</li>
+</ul><ul>
+<li>REST API for mobile/web clients</li>
+</ul><ul>
+<li>OTP or email login for participants</li>
+</ul><h2>Acknowledgement</h2>
+<hr><ul>
+<li>This project is was inspired by Official  NILIET Examination CCC or O level</li>
+</ul><h2>Contact</h2>
+<hr><p><span style="margin-right: 30px;"></span><a href="https://github.com/sde-666"><img target="_blank" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="width: 10%;"></a></p>
