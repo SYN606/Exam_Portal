@@ -48,19 +48,21 @@ examportal/
 └── manage.py
 ## 🛠️ Setup Instructions
 
+
+## 📋 Setup Instructions
+
 ### 1. Clone the Repository
-
-
-git clone https://github.com/your-username/your-repo.git
-cd examportal
+```bash
+git clone https://github.com/your-username/exam-portal.git
+cd exam-portal
 
 
 ### 2. Create a Virtual Environment (if You want)
-
-
+```bash
 python -m venv venv
-venv\Scripts\activate  # On Windows
-source venv/bin/activate  # On Linux/Mac
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
 
 
 ### 3. Install Dependencies
