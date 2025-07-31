@@ -18,6 +18,7 @@
         }
         .main-container {
             display: flex;
+            flex-wrap: wrap;
             padding: 20px;
             gap: 20px;
         }
@@ -36,15 +37,25 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.05);
             height: fit-content;
         }
-        h2 { color: #333; }
+        h2 { color: #9500ff; }
         .timer-box {
             font-size: 18px;
             font-weight: bold;
-            color: #d9534f;
+            color: #f43029;
             margin-bottom: 15px;
         }
         .question-box { margin-bottom: 20px; }
-        .option { margin: 10px 0; }
+        .option { 
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #000000;
+         }
+         input[type="radio"] {
+    transform: scale(1.6);
+    margin-right: 8px;
+    cursor: pointer;
+}
         label { cursor: pointer; }
         .btn {
             padding: 10px 20px;
@@ -57,28 +68,22 @@
         .btn-save { background-color: #28a745; color: white; }
         .btn-save:hover { background-color: #218838; }
         .btn-finish { background-color: #fc1313; color: white; margin-top: 20px; }
-        .btn-finish:hover { background-color: #0056b3; }
+        .btn-finish:hover { background-color: #c00; }
         .question-nav {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
         .warning-box {
-    background-color: #fff3cd; /* हल्का पीला */
-    color: #856404; /* गहरा ब्राउन */
-    border: 1px solid #ffeeba;
-    padding: 10px 20px;
-    margin: 10px 0;
-    font-weight: bold;
-    border-radius: 8px;
-    box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
-}
-
-.warning-box marquee {
-    display: block;
-    margin: 5px 0;
-    font-size: 10px;
-}
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+        }
         .question-nav button {
             width: 40px;
             height: 40px;
@@ -100,17 +105,30 @@
         }
         #perQuestionTimer {
             font-weight: bold;
-            color: #dc3545;
+            color: #119d30;
             margin-top: 10px;
+        }
+        #qtext {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000000;
+        }
+        #qnumber {
+            font-size: 22px;
+            margin-right: 10px;
+            Color: #000000;
         }
     </style>
 </head>
 <body>
 
-<div class="navbar"><h1>Karamraji Institute of Computer Science & IT | Exam-Portal</h1><div class="warning-box">
-1. ) यदि आप परीक्षा के दौरान किसी अन्य टैब पर जाते हैं, तो 3 चेतावनियों के बाद परीक्षा स्वतः सबमिट हो जाएगी।<br>
-2.) जब तक आप सभी प्रश्न हल न कर लें, तब तक Final Submit बटन पर क्लिक न करें, अन्यथा परीक्षा अंतिम रूप से सबमिट हो जाएगी।
-    </div></div>
+<div class="navbar">
+    <h1>Karamraji Institute of Computer Science & IT | Exam-Portal</h1>
+    <div class="warning-box">
+        1.) यदि आप परीक्षा के दौरान किसी अन्य टैब पर जाते हैं, तो 3 चेतावनियों के बाद परीक्षा स्वतः सबमिट हो जाएगी।<br>
+        2.) जब तक आप सभी प्रश्न हल न कर लें, तब तक Final Submit बटन पर क्लिक न करें, अन्यथा परीक्षा अंतिम रूप से सबमिट हो जाएगी।
+    </div>
+</div>
 
 <div class="main-container">
     <div class="left-pane">
@@ -118,8 +136,7 @@
         <div class="timer-box">⏰ Time Left: <span id="timer">--:--</span></div>
 
         <div class="question-box">
-            <p id="qnumber"><strong>Q1</strong></p>
-            <p id="qtext">Loading question...</p>
+            <p><strong id="qnumber">Q1.</strong> <span id="qtext">Loading question...</span></p>
 
             <div class="option"><input type="radio" id="optA" name="option" value="A"><label for="optA" id="labelA">A. Option A</label></div>
             <div class="option"><input type="radio" id="optB" name="option" value="B"><label for="optB" id="labelB">B. Option B</label></div>
@@ -129,14 +146,13 @@
             <div id="perQuestionTimer">Wait for: 10s</div>
 
             <button class="btn btn-save" onclick="saveAnswer()">Save & Next</button>
-            
         </div>
 
         <div id="result"></div>
     </div>
 
     <div class="right-pane">
-        <button class="btn btn-finish" onclick="submitExam()">✅ Finish Exam</button>
+        <button class="btn btn-finish" onclick="submitExam()">✅ Final Submit</button>
         <h3>📌 Choose Question</h3>
         <div class="question-nav">
             {% for q in questions %}
@@ -145,8 +161,6 @@
         </div>
     </div>
 </div>
-
-<!-- ... js ... -->
 
 <script>
     let currentIndex = 0;
@@ -191,7 +205,7 @@
 
         currentIndex = index;
         const q = questions[index];
-        document.getElementById('qnumber').innerText = "Q" + (index + 1);
+        document.getElementById('qnumber').innerText = "Q" + (index + 1) + ".";
         document.getElementById('qtext').innerText = q.text;
         document.getElementById('labelA').innerText = "A. " + q.option_a;
         document.getElementById('labelB').innerText = "B. " + q.option_b;
@@ -263,7 +277,6 @@
         }
     }, 1000);
 
-    // On load
     window.onload = () => {
         if (questions.length > 0) {
             showQuestion(0);
@@ -281,7 +294,6 @@
         }
     };
 
-    // Disable copy/paste/dev tools
     document.addEventListener("contextmenu", e => e.preventDefault());
     ["copy", "cut", "paste"].forEach(evt => {
         document.addEventListener(evt, e => e.preventDefault());
@@ -296,7 +308,6 @@
         }
     });
 </script>
-
 
 </body>
 </html>
