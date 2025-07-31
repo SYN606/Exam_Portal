@@ -126,6 +126,8 @@
     </div>
 </div>
 
+<!-- ... (rest of your HTML unchanged up to result rendering) ... -->
+
 <script>
     let currentIndex = 0;
     let questions = {{ questions|safe }};
@@ -220,6 +222,7 @@
             document.getElementById("result").innerHTML =
                 `<h3>✅ Result:</h3>
                 <p><b>Total Questions:</b> ${data.total}</p>
+                <p><b>Attempted Questions:</b> ${data.attempted}</p>
                 <p><b>Correct Answers:</b> ${data.correct}</p>
                 <p><b>Wrong Answers:</b> ${data.wrong}</p>`;
         });
@@ -273,6 +276,7 @@
         }
     });
 </script>
+
 
 </body>
 </html>

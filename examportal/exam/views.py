@@ -65,12 +65,15 @@ def submit_exam(request):
     question_dict = {str(q.id): q for q in questions}
 
     score = 0
+    attempted = 0
     detailed_results = []
 
     for index, qid in enumerate(question_ids):
         q = question_dict.get(str(qid))
         if q:
             user_answer = answers.get(str(index))
+            if user_answer:  # ✅ Count as attempted if answer exists
+                attempted += 1
             correct = (user_answer == q.correct_option)
             if correct:
                 score += 1
@@ -92,6 +95,7 @@ def submit_exam(request):
     return JsonResponse({
         "message": "Exam submitted successfully",
         "total": len(questions),
+        "attempted": attempted,
         "correct": score,
         "wrong": len(questions) - score,
         "details": detailed_results
