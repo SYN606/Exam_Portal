@@ -3,26 +3,107 @@
 <head>
     <title>{{ exam.title }}</title>
     <style>
-        /* Styles unchanged */
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
-        .navbar { background-color: #4a90e2; color: white; padding: 15px 30px; font-size: 24px; font-weight: bold; }
-        .main-container { display: flex; padding: 20px; gap: 20px; }
-        .left-pane { flex: 3; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-        .right-pane { flex: 1; background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.05); height: fit-content; }
-        h2 { color: #333; }
-        .timer-box { font-size: 18px; font-weight: bold; color: #d9534f; margin-bottom: 15px; }
-        .question-box { margin-bottom: 20px; }
-        .option { margin: 10px 0; }
-        label { cursor: pointer; }
-        .btn { padding: 10px 20px; font-size: 15px; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-save { background-color: #28a745; color: white; }
-        .btn-save:hover { background-color: #218838; }
-        .btn-finish { background-color: #007bff; color: white; margin-top: 20px; }
-        .btn-finish:hover { background-color: #0056b3; }
-        .question-nav { display: flex; flex-wrap: wrap; gap: 8px; }
-        .question-nav button { width: 40px; height: 40px; font-weight: bold; border-radius: 6px; border: 1px solid #ccc; background-color: #f9f9f9; cursor: pointer; }
-        .question-nav button:hover { background-color: #d9edf7; }
-        #result { margin-top: 20px; background: #e6ffe6; padding: 15px; border: 1px solid #66cc66; border-radius: 8px; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: #f0f2f5;
+            user-select: none; /* prevent text selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .navbar {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .main-container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+        .left-pane {
+            flex: 3;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        .right-pane {
+            flex: 1;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+        h2 {
+            color: #333;
+        }
+        .timer-box {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+        .question-box {
+            margin-bottom: 20px;
+        }
+        .option {
+            margin: 10px 0;
+        }
+        label {
+            cursor: pointer;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-save:hover {
+            background-color: #218838;
+        }
+        .btn-finish {
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+        }
+        .btn-finish:hover {
+            background-color: #0056b3;
+        }
+        .question-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .question-nav button {
+            width: 40px;
+            height: 40px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .question-nav button:hover {
+            background-color: #d9edf7;
+        }
+        #result {
+            margin-top: 20px;
+            background: #e6ffe6;
+            padding: 15px;
+            border: 1px solid #66cc66;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -30,7 +111,6 @@
     <div class="navbar">Skilldotpy | Exam-Portal</div>
 
     <div class="main-container">
-        <!-- Left pane -->
         <div class="left-pane">
             <h2>{{ exam.title }}</h2>
             <div class="timer-box">⏰ Time Left: <span id="timer">--:--</span></div>
@@ -50,7 +130,6 @@
             <div id="result"></div>
         </div>
 
-        <!-- Right pane -->
         <div class="right-pane">
             <h3>📌 Choose Question</h3>
             <div class="question-nav">
@@ -61,7 +140,6 @@
         </div>
     </div>
 
-    <!-- JavaScript Section -->
     <script>
         let currentIndex = 0;
         let questions = {{ questions|safe }};
@@ -111,7 +189,7 @@
                 body: JSON.stringify({
                     answers: userAnswers,
                     exam_id: {{ exam.id }},
-                    participant_id: {{ participant_id }}  // ✅ sending participant_id
+                    participant_id: {{ participant_id }}
                 })
             })
             .then(response => response.json())
@@ -124,7 +202,6 @@
             });
         }
 
-        // ⏰ Timer Setup
         let timeLeft = {{ exam.duration }} * 60;
         const timerElement = document.getElementById("timer");
         const timerInterval = setInterval(() => {
@@ -139,12 +216,39 @@
             }
         }, 1000);
 
-        // 👇 Load first question
         window.onload = () => {
             if (questions.length > 0) {
                 showQuestion(0);
             }
         };
+
+        // 🛡️ Block tab switch
+        let blurCount = 0;
+        window.onblur = function () {
+            blurCount++;
+            alert("⚠️ Dont Switch or close the pannel other wise exam will submitted on 3 Warnings !");
+            if (blurCount >= 3) {
+                alert("❌ Exam auto-submitted due to multiple tab switches.");
+                submitExam();
+            }
+        };
+
+        // 🛡️ Disable right-click and copy/cut/paste
+        document.addEventListener("contextmenu", e => e.preventDefault());
+        ["copy", "cut", "paste"].forEach(evt => {
+            document.addEventListener(evt, e => e.preventDefault());
+        });
+
+        // 🛡️ Block dev tools (F12, Ctrl+Shift+I, Ctrl+U)
+        document.addEventListener("keydown", function(e) {
+            if (
+                e.key === "F12" ||
+                (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+                (e.ctrlKey && e.key === "U")
+            ) {
+                e.preventDefault();
+            }
+        });
     </script>
 
 </body>
