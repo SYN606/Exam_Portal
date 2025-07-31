@@ -1,69 +1,86 @@
-# 📝 Exam Portal
+# 📝 Django Exam Portal
 
-**Exam Portal** is a Django-based web application that allows users to take exams online. Admins can create exams, add questions, and manage participant data. Participants can register, take exams, and receive automatic results. I Created for My o level Students.
+A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.
 
-## 🚀 Features
+## 📌 Features
 
-- 👨‍🏫 Admin interface to manage exams, questions, and participants
-- ✅ Exam visibility toggle (show/hide exams)
-- 🧑 Participant registration form before each exam
-- 🧠 Exam questions rendered dynamically
-- 🧮 Auto-grading with detailed result feedback
-- 🕒 Timer-ready structure (easy to add countdown)
-- 📊 Clean database models using Django ORM
+- 🔐 Participant login using name and mobile number
+- 🎯 Multiple exams with visibility toggle
+- 🔄 Resume exam after refresh/server restart
+- ✅ Auto-save answers after every question
+- 📊 Real-time score calculation and result display
+- ⏱ Exam-wide timer + per-question lock timer
+- 🚫 Tab switch detection (auto-submit after 3 warnings)
+- 🔐 No right-click, copy-paste, or Tab switching allowed during exam
 
-## 📦 Project Structure
+## 🛠 Tech Stack
 
-```
+- **Backend**: Django 5.x
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: SQLite (default, easy to replace with PostgreSQL/MySQL)
+
+## 📂 Project Structure
+
 examportal/
-├── exam/               # Main app for exams
-│   ├── models.py       # Exam, Question, Participant models
-│   ├── views.py        # Core views (home, start_exam, submit_exam)
-│   ├── admin.py        # Admin panel customization
-│   ├── urls.py         # App routing
-│   └── templates/      # HTML templates (home, exam page, etc.)
+├── exam/
+│ ├── migrations/
+│ ├── static/
+│ ├── templates/
+│ │ └── exam/
+│ │ ├── home.html
+│ │ ├── participant_form.html
+│ │ └── exam_page.html
+│ ├── init.py
+│ ├── admin.py
+│ ├── apps.py
+│ ├── forms.py
+│ ├── models.py
+│ ├── tests.py
+│ ├── urls.py
+│ └── views.py
 ├── examportal/
-│   ├── settings.py     # Project settings
-│   └── urls.py         # Main URL routing
-├── db.sqlite3          # SQLite database
-└── manage.py           # Django project manager
-```
-
+│ ├── init.py
+│ ├── asgi.py
+│ ├── settings.py
+│ ├── urls.py
+│ └── wsgi.py
+├── db.sqlite3
+└── manage.py
 ## 🛠️ Setup Instructions
 
 ### 1. Clone the Repository
 
-```bash
+
 git clone https://github.com/your-username/your-repo.git
 cd examportal
-```
 
-### 2. Create a Virtual Environment (Optional but recommended)
 
-```bash
+### 2. Create a Virtual Environment (if You want)
+
+
 python -m venv venv
 venv\Scripts\activate  # On Windows
 source venv/bin/activate  # On Linux/Mac
-```
+
 
 ### 3. Install Dependencies
 
-```bash
+
 pip install django
-```
+
 
 ### 4. Apply Migrations
 
-```bash
+
 python manage.py makemigrations
 python manage.py migrate
-```
+
 
 ### 5. Run the Development Server
 
-```bash
+
 python manage.py runserver
-```
+
 
 Then open your browser and go to:
 
@@ -75,9 +92,9 @@ http://127.0.0.1:8000/
 
 To access the Django admin panel:
 
-```bash
+
 python manage.py createsuperuser
-```
+
 
 Then visit:
 
@@ -92,15 +109,18 @@ http://127.0.0.1:8000/admin/
 - SQLite3 (default database)
 - HTML5 / CSS3 (templates)
 
-## 💡 Future Enhancements
 
-- Countdown timer for exams
-- Result download in PDF format
-- REST API for mobile/web clients
-- OTP or email login for participants
+## 💡 Models 
 
-## 🙌 Contributing
+Exam: Title, description, duration, visibility.
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to improve.
-.
-----Aditya pathak 
+Question: Belongs to an Exam. Has 4 options + correct answer.
+
+Participant: Linked to an Exam with name, mobile number, and score.
+
+ParticipantAnswer: Stores per-question answer and allows resume support.
+
+👨‍💻 Author
+Developed by [Aditya Pathak].
+Email: skilldotpy@gmail.com
+GitHub: https://github.com/sde-666
