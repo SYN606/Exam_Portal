@@ -12,8 +12,8 @@
         .navbar {
             background-color: #4a90e2;
             color: white;
-            padding: 15px 30px;
-            font-size: 24px;
+            padding: 10px 30px;
+            font-size: 16px;
             font-weight: bold;
         }
         .main-container {
@@ -56,13 +56,29 @@
         }
         .btn-save { background-color: #28a745; color: white; }
         .btn-save:hover { background-color: #218838; }
-        .btn-finish { background-color: #007bff; color: white; margin-top: 20px; }
+        .btn-finish { background-color: #fc1313; color: white; margin-top: 20px; }
         .btn-finish:hover { background-color: #0056b3; }
         .question-nav {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
+        .warning-box {
+    background-color: #fff3cd; /* हल्का पीला */
+    color: #856404; /* गहरा ब्राउन */
+    border: 1px solid #ffeeba;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+.warning-box marquee {
+    display: block;
+    margin: 5px 0;
+    font-size: 10px;
+}
         .question-nav button {
             width: 40px;
             height: 40px;
@@ -91,7 +107,10 @@
 </head>
 <body>
 
-<div class="navbar">Skilldotpy | Exam-Portal</div>
+<div class="navbar"><h1>Karamraji Institute of Computer Science & IT | Exam-Portal</h1><div class="warning-box">
+1. ) यदि आप परीक्षा के दौरान किसी अन्य टैब पर जाते हैं, तो 3 चेतावनियों के बाद परीक्षा स्वतः सबमिट हो जाएगी।<br>
+2.) जब तक आप सभी प्रश्न हल न कर लें, तब तक Final Submit बटन पर क्लिक न करें, अन्यथा परीक्षा अंतिम रूप से सबमिट हो जाएगी।
+    </div></div>
 
 <div class="main-container">
     <div class="left-pane">
@@ -110,13 +129,14 @@
             <div id="perQuestionTimer">Wait for: 10s</div>
 
             <button class="btn btn-save" onclick="saveAnswer()">Save & Next</button>
-            <button class="btn btn-finish" onclick="submitExam()">✅ Finish Exam</button>
+            
         </div>
 
         <div id="result"></div>
     </div>
 
     <div class="right-pane">
+        <button class="btn btn-finish" onclick="submitExam()">✅ Finish Exam</button>
         <h3>📌 Choose Question</h3>
         <div class="question-nav">
             {% for q in questions %}
@@ -126,7 +146,7 @@
     </div>
 </div>
 
-<!-- ... (rest of your HTML unchanged up to result rendering) ... -->
+<!-- ... js ... -->
 
 <script>
     let currentIndex = 0;
