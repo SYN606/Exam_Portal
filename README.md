@@ -54,7 +54,7 @@ examportal/
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/your-username/exam-portal.git
-cd exam-portal
+cd exam-portal```
 
 
 ### 2. Create a Virtual Environment (if You want)
