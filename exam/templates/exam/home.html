@@ -1,0 +1,189 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Karamraji Institute | Exam Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fb;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: linear-gradient(to right, #5f90eb, #ce03f6);
+      padding: 10px 20px;
+      color: #fefefe;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .navbar-left img {
+      height: 120px;
+      max-width: 100%;
+      border-radius: 6px;
+    }
+
+    .navbar-title {
+      font-size: 2.2vw;
+      font-weight: 600;
+      text-align: center;
+      flex: 1;
+      color: #ffffff;
+      word-break: break-word;
+    }
+
+    #e {
+      font-size: 1.5vw;
+      color: rgb(144, 238, 202);
+      font-weight: 600;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-title {
+        font-size: 5.5vw;
+      }
+      #e {
+        font-size: 4.5vw;
+      }
+      .navbar-left {
+        flex-direction: column;
+      }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .container h1 {
+      text-align: center;
+      color: #0d47a1;
+      margin-bottom: 30px;
+      font-size: 38px;
+    }
+
+    .exam-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .exam-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+      border-top: 5px solid #1565c0;
+      transition: transform 0.3s ease;
+    }
+
+    .exam-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+    }
+
+    .exam-card h2 {
+      font-size: 20px;
+      color: #1a237e;
+      margin-bottom: 10px;
+    }
+
+    .exam-card p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .start-btn {
+      background-color: #1e88e5;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .start-btn:hover {
+      background-color: #0d47a1;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .footer a {
+      color: #1565c0;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="{% static 'images/logo.jpg' %}" alt="Institute Logo" />
+      <div class="navbar-title">
+        Karamraji Institute of Computer Science & IT
+        <span id="e">Examination Portal</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container">
+    <h1>📚 Avaliable exams</h1>
+    <div class="exam-grid">
+      {% for exam in exams %}
+      <div class="exam-card">
+        <h2>{{ exam.title }}</h2>
+        <p>{{ exam.description }}</p>
+        <p><strong>Total Questions:</strong> {{ exam.total_questions }}</p>
+        <p><strong>Duration:</strong> {{ exam.duration }} minutes</p>
+        <a href="{% url 'start_exam' exam.id %}">
+          <button class="start-btn">Start Exam</button>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Developed by <a href="https://github.com/sde-666" target="_blank">Mr.Aditya Pathak</a>
+  </div>
+
+</body>
+</html>
