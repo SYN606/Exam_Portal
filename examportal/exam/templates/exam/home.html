@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -22,44 +23,54 @@
     .navbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       flex-wrap: wrap;
       background: linear-gradient(to right, #5f90eb, #ce03f6);
       padding: 10px 20px;
       color: #fefefe;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
     .navbar-left {
       display: flex;
       align-items: center;
       gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
     }
+
     .navbar-left img {
-      height: 150px;
+      height: 120px;
+      max-width: 100%;
       border-radius: 6px;
     }
-    .navbar-title {
-      font-size: 50px;
-      font-weight: 600;
-      text-align: center;
-      flex: 1;
-    }
-    #e{font-size: 40px;
-        color: rgb(144, 238, 202);
-      font-weight: 600;
-      text-align: center;
-      flex: 1;
 
+    .navbar-title {
+      font-size: 2.2vw;
+      font-weight: 600;
+      text-align: center;
+      flex: 1;
+      color: #ffffff;
+      word-break: break-word;
+    }
+
+    #e {
+      font-size: 1.5vw;
+      color: rgb(144, 238, 202);
+      font-weight: 600;
+      display: block;
     }
 
     @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
       .navbar-title {
-        text-align: left;
-        margin-top: 10px;
+        font-size: 5.5vw;
+      }
+      #e {
+        font-size: 4.5vw;
+      }
+      .navbar-left {
+        flex-direction: column;
       }
     }
 
@@ -144,7 +155,10 @@
   <div class="navbar">
     <div class="navbar-left">
       <img src="{% static 'images/logo.jpg' %}" alt="Institute Logo" />
-      <div class="navbar-title">Karamraji Institute of Computer Science & IT  <span id="e">Examination Portal</span></div>
+      <div class="navbar-title">
+        Karamraji Institute of Computer Science & IT
+        <span id="e">Examination Portal</span>
+      </div>
     </div>
   </div>
 
