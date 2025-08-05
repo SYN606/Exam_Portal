@@ -12,9 +12,16 @@
 <body>
     <h2 style="text-align:center;">Enter Your Details to Start Exam</h2>
     <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Start {{ exam.title }}</button>
-    </form>
+    {% csrf_token %}
+    
+    <label for="id_name">Name:</label>
+    {{ form.name }}
+
+    <label for="id_mobile">Mobile Number:</label>
+    <input type="text" name="mobile" id="id_mobile" pattern="\d{10,}" title="Enter at least 10 digits" required>
+
+    <button type="submit">Start {{ exam.title }}</button>
+</form>
+
 </body>
 </html>
