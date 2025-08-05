@@ -1,5 +1,5 @@
 # 📝 Django Exam Portal
-<hr><p>A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.</p><br>This project is was inspired by Official  NILIET Examination CCC or O level<h2>General Information</h2>
+<hr><p>A web-based online examination system built using Django. This platform allows participants to take exams with automatic answer saving, resuming capability, timer enforcement, and basic cheating prevention.</p><br>This project is was inspired by Official  NILIET Examination CCC or O level Check Here live Webpage - <a href="https://kics.pythonanywhere.com/">Click</a><h2>General Information</h2>
 <hr><ul>
 <li>Exam Portal</li>
 </ul><ul>
