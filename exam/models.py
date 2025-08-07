@@ -38,7 +38,6 @@ class Participant(models.Model):
         return f"{self.name} ({self.mobile})"
 
 
-# ✅ NEW MODEL for saving individual answers persistently
 class ParticipantAnswer(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

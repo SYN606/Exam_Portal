@@ -1,0 +1,85 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block content %}
+  {% comment %}hero section{% endcomment %}
+  <header class="relative bg-cover bg-center h-[33vh]" style="background-image: url('https://images.pexels.com/photos/2570062/pexels-photo-2570062.jpeg');">
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+
+    <!-- Hero content -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2 animate-fadeInUp">Welcome to Live Exam Portal</h1>
+      <p class="text-md md:text-lg mb-4 animate-fadeInUp delay-100">A brief description</p>
+      <a href="{% url 'exam' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition">Get Started</a>
+    </div>
+  </header>
+
+  {% comment %}cards{% endcomment %}
+  <section class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-900">Your Gateway to <span class="text-blue-600">Success</span></h2>
+        <p class="mt-2 text-lg text-gray-600">
+          Explore powerful features designed to supercharge your <span class="font-semibold text-gray-800">O Level journey</span>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-blue-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-book-open text-blue-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Previous Year Papers</h3>
+          <p class="text-gray-600">
+            Practice with a rich set of <span class="font-semibold text-gray-800">authentic past papers</span> to master exam patterns.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-green-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-shield-alt text-green-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Guaranteed Results</h3>
+          <p class="text-gray-600">
+            Achieve your goals with our <span class="text-green-700 font-medium">proven strategies</span> and expert guidance.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-purple-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-laptop-code text-purple-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Top-Rated Prep Platform</h3>
+          <p class="text-gray-600">
+            Join the <span class="text-purple-700 font-medium">best-in-class digital learning</span> environment tailored for success.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-pink-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-user-graduate text-pink-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Expert Study Material</h3>
+          <p class="text-gray-600">
+            Crafted by industry experts to cover <span class="font-semibold">exact exam needs</span> — no fluff.
+          </p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-yellow-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-chart-line text-yellow-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Progress Tracking</h3>
+          <p class="text-gray-600">
+            Visualize your journey with <span class="text-yellow-700 font-medium">real-time analytics</span> and feedback.
+          </p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="bg-white shadow-md rounded-lg p-6 border-b-4 border-red-500 transition transform hover:scale-105 hover:shadow-xl">
+          <i class="fas fa-pen-alt text-red-600 text-3xl mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">Mock Test Simulator</h3>
+          <p class="text-gray-600">
+            Experience the exam vibe with <span class="text-red-700 font-medium">timed, auto-evaluated mock tests</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

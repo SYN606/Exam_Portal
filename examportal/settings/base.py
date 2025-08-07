@@ -6,13 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = 'django-insecure-y#(4vz@y3=r7)!z_v@h#&#a&6p@&^rg$0!0#wph(az$pn#!+q0'
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'exam',  # Your app
+    'jazzmin', 'django.contrib.admin', 'django.contrib.auth',
+    'django.contrib.contenttypes', 'django.contrib.sessions',
+    'django.contrib.messages', 'django.contrib.staticfiles', 'exam', 'home'
 ]
 
 MIDDLEWARE = [
