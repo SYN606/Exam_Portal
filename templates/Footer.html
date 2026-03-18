@@ -1,76 +1,116 @@
 <footer class="bg-gray-900 text-white py-16">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex flex-wrap -mx-4">
-      <!-- Company -->
+
+      <!-- Portal -->
       <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
-        <h4 class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-pink-500 after:mt-2">Company</h4>
+        <h4
+          class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
+          Exam Portal
+        </h4>
         <ul>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">About Us</a>
+            <a href="{% url 'home:about-us' %}" class="text-gray-400 hover:text-white transition">About Portal</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Our Services</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Announcements</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Privacy Policy</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Latest Updates</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Affiliate Program</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Careers</a>
           </li>
         </ul>
       </div>
 
-      <!-- Get Help -->
+      <!-- Students -->
       <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
-        <h4 class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-pink-500 after:mt-2">Get Help</h4>
+        <h4
+          class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
+          Students
+        </h4>
         <ul>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">FAQ</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Register</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Shipping</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Login</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Returns</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Admit Card</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Order Status</a>
-          </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Payment Options</a>
+            <a href="#" class="text-gray-400 hover:text-white transition">Results</a>
           </li>
         </ul>
       </div>
 
-      <!-- Online Shop -->
+      <!-- Exams -->
       <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
-        <h4 class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-pink-500 after:mt-2">Online Shop</h4>
+        <h4
+          class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
+          Examinations
+        </h4>
         <ul>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Watch</a>
+            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Upcoming Exams</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Bag</a>
+            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Exam Schedule</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Shoes</a>
+            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Syllabus</a>
           </li>
           <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition-all">Dress</a>
+            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Previous Papers</a>
           </li>
         </ul>
       </div>
 
-      <!-- Follow Us -->
+      <!-- Support -->
       <div class="w-full md:w-1/2 lg:w-1/4 px-4">
-        <h4 class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-pink-500 after:mt-2">Follow Us</h4>
-        <div class="flex space-x-4">
-          <a href="#" class="h-10 w-10 flex items-center justify-center rounded-full bg-white bg-opacity-20 text-white hover:bg-white hover:text-gray-900 transition"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="h-10 w-10 flex items-center justify-center rounded-full bg-white bg-opacity-20 text-white hover:bg-white hover:text-gray-900 transition"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="h-10 w-10 flex items-center justify-center rounded-full bg-white bg-opacity-20 text-white hover:bg-white hover:text-gray-900 transition"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="h-10 w-10 flex items-center justify-center rounded-full bg-white bg-opacity-20 text-white hover:bg-white hover:text-gray-900 transition"><i class="fab fa-linkedin-in"></i></a>
+        <h4
+          class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
+          Support
+        </h4>
+        <ul>
+          <li class="mb-2">
+            <a href="#" class="text-gray-400 hover:text-white transition">Help Center</a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-gray-400 hover:text-white transition">FAQs</a>
+          </li>
+          <li class="mb-2">
+            <a href="{% url 'home:contact-us' %}" class="text-gray-400 hover:text-white transition">Contact Us</a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-gray-400 hover:text-white transition">Report Issue</a>
+          </li>
+        </ul>
+
+        <!-- Social Icons -->
+        <div class="flex space-x-4 mt-6">
+          <a href="#"
+            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#"
+            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#"
+            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
         </div>
       </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div class="border-t border-gray-700 mt-12 pt-6 text-center text-gray-500 text-sm">
+      © 2026 Exam Portal. All rights reserved.
     </div>
   </div>
 </footer>

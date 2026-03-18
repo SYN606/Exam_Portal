@@ -1,16 +1,63 @@
 {% extends "admin/base_site.html" %}
+
 {% block content %}
-<h2>📥 Import Questions from CSV</h2>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <label>Select Exam:</label><br>
-  <select name="exam_id" required>
-    {% for exam in exams %}
-      <option value="{{ exam.id }}">{{ exam.title }}</option>
-    {% endfor %}
-  </select><br><br>
-  <label>Select CSV file:</label><br>
-  <input type="file" name="csv_file" accept=".csv" required><br><br>
-  <button type="submit" class="default">🚀 Upload CSV</button>
-</form>
+<div style="max-width: 700px; margin: 40px auto;">
+
+  <!-- CARD -->
+  <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+
+    <!-- TITLE -->
+    <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 10px;">
+      📥 Import Questions
+    </h2>
+
+    <p style="color: #666; margin-bottom: 20px;">
+      Upload a CSV file to bulk import questions into an exam.
+    </p>
+
+    <!-- FORM -->
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- EXAM SELECT -->
+      <div style="margin-bottom: 20px;">
+        <label style="font-weight: 500;">Select Exam</label><br>
+        <select name="exam_id" required
+          style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
+          {% for exam in exams %}
+          <option value="{{ exam.id }}">{{ exam.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- FILE INPUT -->
+      <div style="margin-bottom: 20px;">
+        <label style="font-weight: 500;">Upload CSV File</label><br>
+        <input type="file" name="csv_file" accept=".csv" required style="margin-top: 5px;">
+      </div>
+
+      <!-- FORMAT GUIDE -->
+      <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px;">
+        <strong>📄 CSV Format:</strong><br>
+        <code>
+          question,option_a,option_b,option_c,option_d,correct_option
+        </code>
+        <br><br>
+        Example:<br>
+        <code>
+          What is 2+2?,1,2,3,4,D
+        </code>
+      </div>
+
+      <!-- BUTTON -->
+      <button type="submit"
+        style="background: #4f46e5; color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">
+        🚀 Upload & Import
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
 {% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Contact Us
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-16 text-center">
+    <h1 class="text-3xl md:text-4xl font-bold">Get in Touch</h1>
+    <p class="mt-2 text-indigo-100">
+        Have questions, feedback, or need support? We’re here to help.
+    </p>
+</section>
+
+<!-- MAIN -->
+<section class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+        <!-- FORM -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+
+            <h2 class="text-xl font-semibold text-gray-800 mb-6">
+                Send us a message
+            </h2>
+
+            <!-- FIX: explicit action -->
+            <form method="post" action="{% url 'home:contact-us' %}">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" name="name"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your full name" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input type="email" name="email"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your email" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select name="category"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500">
+                        <option value="general">General Inquiry</option>
+                        <option value="support">Technical Support</option>
+                        <option value="exam">Exam Related</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea name="message" rows="4"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Write your message..." required></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-medium transition">
+                    Send Message
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="space-y-6">
+
+            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
+                <div class="h-12 w-12 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-xl">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800">Support</h3>
+                    <p class="text-sm text-gray-500">
+                        Need help with exams or technical issues?
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
+                <div class="h-12 w-12 flex items-center justify-center bg-purple-100 text-purple-600 rounded-xl">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800">Email</h3>
+                    <!-- FIX: clickable mail -->
+                    <a href="mailto:support@examportal.com" class="text-sm text-indigo-600 hover:underline">
+                        support@examportal.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
+                <div class="h-12 w-12 flex items-center justify-center bg-green-100 text-green-600 rounded-xl">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800">Business Inquiries</h3>
+                    <p class="text-sm text-gray-500">
+                        For partnerships and integrations, contact our team.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-indigo-600 text-white p-6 rounded-2xl shadow">
+                <h3 class="font-semibold text-lg mb-2">Why Contact Us?</h3>
+                <ul class="text-sm text-indigo-100 space-y-1">
+                    <li>Technical issues during exams</li>
+                    <li>Feedback and suggestions</li>
+                    <li>Platform support</li>
+                    <li>Business or collaboration queries</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

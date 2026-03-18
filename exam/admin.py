@@ -1,94 +1,151 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponse
 from django.urls import path
 from django.shortcuts import render, redirect
-from django.contrib import messages
 import csv
 import io
 
-from .models import Exam, Question, Participant
+from .models import Exam, Question, Participant, Option
 
-# ✅ Exam Admin
+
+# =======================
+# EXAM ADMIN
+# =======================
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ('title', 'visible', 'total_questions', 'duration')
-    list_filter = ('visible',)
-    search_fields = ('title',)
-    list_editable = ('visible',)
+    list_display = ("title", "is_active", "total_questions", "duration")
+    list_filter = ("is_active",)
+    search_fields = ("title",)
+    list_editable = ("is_active",)
 
 
-# ✅ Participant Admin with CSV export
+# =======================
+# PARTICIPANT ADMIN
+# =======================
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'mobile', 'exam', 'score', 'exam_date')
-    list_filter = ('exam',)
-    search_fields = ('name', 'mobile')
-    actions = ['export_as_csv']
+    list_display = ("name", "mobile", "exam", "score", "exam_date", "is_submitted")
+    list_filter = ("exam", "is_submitted")
+    search_fields = ("name", "mobile")
+    actions = ["export_as_csv"]
 
     def exam_date(self, obj):
         return obj.started_at.date()
-    exam_date.short_description = 'Date'
+
+    exam_date.short_description = "Date"
 
     def export_as_csv(self, request, queryset):
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="participants.csv"'
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="participants.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(['Name', 'Mobile', 'Exam', 'Score', 'Date'])
+        writer.writerow(["Name", "Mobile", "Exam", "Score", "Date", "Submitted"])
 
         for participant in queryset:
-            writer.writerow([
-                participant.name,
-                participant.mobile,
-                participant.exam.title,
-                getattr(participant, 'score', 0),
-                participant.started_at.date()
-            ])
+            writer.writerow(
+                [
+                    participant.name,
+                    participant.mobile,
+                    participant.exam.title,
+                    participant.score,
+                    participant.started_at.date(),
+                    participant.is_submitted,
+                ]
+            )
 
         return response
 
-    export_as_csv.short_description = "Export Selected Participants to CSV"
+    export_as_csv.short_description = "Export selected participants"
 
 
-# ✅ Question Admin with CSV import
+# =======================
+# INLINE OPTION ADMIN
+# =======================
+class OptionInline(admin.TabularInline):
+    model = Option
+    extra = 4  # show 4 options by default
+
+
+# =======================
+# QUESTION ADMIN
+# =======================
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('text', 'exam', 'correct_option')
-    list_filter = ('exam',)
-    search_fields = ('text',)
+    list_display = ("short_text", "exam", "order")
+    list_filter = ("exam",)
+    search_fields = ("text",)
+    inlines = [OptionInline]
     change_list_template = "admin/question_changelist.html"
 
+    def short_text(self, obj):
+        return obj.text[:50]
+
+    short_text.short_description = "Question"
+
+    # =======================
+    # CUSTOM URL
+    # =======================
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('import-csv/', self.import_csv)
+            path("import-csv/", self.import_csv, name="import_questions_csv"),
         ]
         return custom_urls + urls
 
+    # =======================
+    # CSV IMPORT
+    # =======================
     def import_csv(self, request):
-        if request.method == "POST" and request.FILES.get("csv_file") and request.POST.get("exam_id"):
-            csv_file = request.FILES["csv_file"]
+        if request.method == "POST":
+            csv_file = request.FILES.get("csv_file")
             exam_id = request.POST.get("exam_id")
 
-            decoded_file = csv_file.read().decode("utf-8")
-            io_string = io.StringIO(decoded_file)
-            reader = csv.DictReader(io_string)
+            if not csv_file or not exam_id:
+                messages.error(request, "Missing file or exam selection")
+                return redirect(request.path)
 
-            count = 0
-            for row in reader:
-                Question.objects.create(
-                    exam_id=exam_id,
-                    text=row['text'],
-                    option_a=row['option_a'],
-                    option_b=row['option_b'],
-                    option_c=row['option_c'],
-                    option_d=row['option_d'],
-                    correct_option=row['correct_option'].upper().strip()
-                )
-                count += 1
+            if not csv_file.name.endswith(".csv"):
+                messages.error(request, "Only CSV files are allowed")
+                return redirect(request.path)
 
-            messages.success(request, f"✅ Imported {count} questions successfully.")
-            return redirect("..")
+            try:
+                decoded = csv_file.read().decode("utf-8")
+                io_string = io.StringIO(decoded)
+                reader = csv.DictReader(io_string)
+
+                count = 0
+
+                for row in reader:
+                    question = Question.objects.create(
+                        exam_id=exam_id, text=row.get("question", "").strip()
+                    )
+
+                    # Create options
+                    options = [
+                        ("A", row.get("option_a")),
+                        ("B", row.get("option_b")),
+                        ("C", row.get("option_c")),
+                        ("D", row.get("option_d")),
+                    ]
+
+                    correct = row.get("correct_option", "").strip().upper()
+
+                    for key, text in options:
+                        if text:
+                            Option.objects.create(
+                                question=question,
+                                text=text.strip(),
+                                is_correct=(key == correct),
+                            )
+
+                    count += 1
+
+                messages.success(request, f"Successfully imported {count} questions")
+                return redirect("..")
+
+            except Exception as e:
+                messages.error(request, f"Import failed: {str(e)}")
+                return redirect(request.path)
 
         exams = Exam.objects.all()
-        return render(request, "admin/import_questions.html", {'exams': exams})
+        return render(request, "admin/import_questions.html", {"exams": exams})

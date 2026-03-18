@@ -1,58 +1,76 @@
-{% extends "Base.html" %}
+{% extends "base.html" %}
 {% load static %}
+
+{% block title %}
+Start Exam
+{% endblock %}
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
-  <div 
-    class="w-full max-w-md bg-white shadow-lg rounded-lg p-8"
-    x-data="{ name: '', mobile: '', error: '' }"
-    @submit.prevent="if (!name || mobile.length < 10) { error = 'Please enter valid name and 10-digit mobile number'; } else { $el.submit(); }"
-  >
-    <h2 class="text-2xl font-bold text-center text-blue-700 mb-6">
-      Enter Your Details to Start <span class="text-purple-700">{{ exam.title }}</span>
-    </h2>
-    
-    <form method="post">
+
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8" x-data="{
+          name: '',
+          mobile: '',
+          error: '',
+          validate() {
+            if (!this.name.trim()) {
+              this.error = 'Name is required';
+              return false;
+            }
+            if (!/^[0-9]{10}$/.test(this.mobile)) {
+              this.error = 'Enter a valid 10-digit mobile number';
+              return false;
+            }
+            this.error = '';
+            return true;
+          }
+       }">
+
+    <!-- TITLE -->
+    <div class="text-center mb-6">
+      <h2 class="text-2xl font-bold text-indigo-600">Start Exam</h2>
+      <p class="text-gray-500 mt-1 text-sm">{{ exam.title }}</p>
+    </div>
+
+    <!-- FORM -->
+    <form method="post" @submit.prevent="if(validate()) $el.submit()">
       {% csrf_token %}
-      
-      <!-- Name -->
-      <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-      <input 
-        type="text" 
-        name="name" 
-        id="id_name"
-        x-model="name"
-        placeholder="Your full name"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-400 mb-4"
-        required
-      />
-      
-      <!-- Mobile -->
-      <label for="id_mobile" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-      <input 
-        type="text" 
-        name="mobile" 
-        id="id_mobile"
-        x-model="mobile"
-        placeholder="10-digit mobile number"
-        pattern="\d{10,}" 
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-400 mb-4"
-        required
-      />
-      
-      <!-- Error Message -->
+
+      <!-- NAME -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+        <input type="text" name="name" x-model="name"
+          class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500" placeholder="Enter your name"
+          required />
+      </div>
+
+      <!-- MOBILE -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+        <input type="tel" name="mobile" x-model="mobile" maxlength="10"
+          class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500" placeholder="10-digit number"
+          required />
+      </div>
+
+      <!-- ERROR -->
       <template x-if="error">
-        <p class="text-red-600 text-sm mb-2" x-text="error"></p>
+        <div class="mb-3 bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm">
+          <span x-text="error"></span>
+        </div>
       </template>
-      
-      <!-- Submit -->
-      <button 
-        type="submit"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
-      >
-        Start {{ exam.title }}
+
+      <!-- SUBMIT -->
+      <button type="submit"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition shadow-sm">
+        Continue
       </button>
     </form>
+
+    <p class="text-xs text-gray-400 text-center mt-4">
+      If you already started, your progress will be resumed automatically.
+    </p>
+
   </div>
+
 </div>
 {% endblock %}

@@ -1,244 +1,131 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ exam.title }}</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f0f2f5;
-            user-select: none;
-        }
-        .navbar {
-            background-color: #4a90e2;
-            color: white;
-            padding: 10px 30px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .main-container {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 20px;
-            gap: 20px;
-        }
-        .left-pane {
-            flex: 3;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-        .right-pane {
-            flex: 1;
-            background: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            height: fit-content;
-        }
-        h2 { color: #9500ff; }
-        .timer-box {
-            font-size: 18px;
-            font-weight: bold;
-            color: #f43029;
-            margin-bottom: 15px;
-        }
-        .question-box { margin-bottom: 20px; }
-        .option { 
-            margin: 15px 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #000000;
-         }
-         input[type="radio"] {
-    transform: scale(1.6);
-    margin-right: 8px;
-    cursor: pointer;
-}
-        label { cursor: pointer; }
-        .btn {
-            padding: 10px 20px;
-            font-size: 15px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-save { background-color: #28a745; color: white; }
-        .btn-save:hover { background-color: #218838; }
-        .btn-finish { background-color: #fc1313; color: white; margin-top: 20px; }
-        .btn-finish:hover { background-color: #c00; }
-        .question-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .warning-box {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            padding: 10px 20px;
-            margin: 10px 0;
-            font-weight: bold;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
-        }
-        .question-nav button {
-            width: 40px;
-            height: 40px;
-            font-weight: bold;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            cursor: pointer;
-        }
-        .question-nav button:hover {
-            background-color: #d9edf7;
-        }
-        #result {
-            margin-top: 20px;
-            background: #e6ffe6;
-            padding: 15px;
-            border: 1px solid #66cc66;
-            border-radius: 8px;
-        }
-        #perQuestionTimer {
-            font-weight: bold;
-            color: #119d30;
-            margin-top: 10px;
-        }
-        #qtext {
-            font-size: 24px;
-            font-weight: 600;
-            color: #000000;
-        }
-        #qnumber {
-            font-size: 22px;
-            margin-right: 10px;
-            Color: #000000;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="navbar">
-    <h1>Karamraji Institute of Computer Science & IT | Exam-Portal</h1>
-    <div class="warning-box">
-        1.) यदि आप परीक्षा के दौरान किसी अन्य टैब पर जाते हैं, तो 3 चेतावनियों के बाद परीक्षा स्वतः सबमिट हो जाएगी।<br>
-        2.) जब तक आप सभी प्रश्न हल न कर लें, तब तक Final Submit बटन पर क्लिक न करें, अन्यथा परीक्षा अंतिम रूप से सबमिट हो जाएगी।
-    </div>
-</div>
+{% block title %}
+{{ exam.title }}
+{% endblock %}
 
-<div class="main-container">
-    <div class="left-pane">
-        <h2>{{ exam.title }}</h2>
-        <div class="timer-box">⏰ Time Left: <span id="timer">--:--</span></div>
+{% block content %}
+<div class="min-h-screen bg-gray-100 px-4 py-6">
 
-        <div class="question-box">
-            <p><strong id="qnumber">Q1.</strong> <span id="qtext">Loading question...</span></p>
+    <!-- HEADER -->
+    <div class="max-w-7xl mx-auto bg-indigo-600 text-white p-5 rounded-2xl shadow-lg">
+        <h1 class="text-lg md:text-xl font-semibold">
+            Online Exam Portal
+        </h1>
 
-            <div class="option"><input type="radio" id="optA" name="option" value="A"><label for="optA" id="labelA">A. Option A</label></div>
-            <div class="option"><input type="radio" id="optB" name="option" value="B"><label for="optB" id="labelB">B. Option B</label></div>
-            <div class="option"><input type="radio" id="optC" name="option" value="C"><label for="optC" id="labelC">C. Option C</label></div>
-            <div class="option"><input type="radio" id="optD" name="option" value="D"><label for="optD" id="labelD">D. Option D</label></div>
-
-            <div id="perQuestionTimer">Wait for: 10s</div>
-
-            <button class="btn btn-save" onclick="saveAnswer()">Save & Next</button>
-        </div>
-
-        <div id="result"></div>
-    </div>
-
-    <div class="right-pane">
-        <button class="btn btn-finish" onclick="submitExam()">✅ Final Submit</button>
-        <h3>📌 Choose Question</h3>
-        <div class="question-nav">
-            {% for q in questions %}
-                <button id="btn{{ forloop.counter0 }}" onclick="showQuestion({{ forloop.counter0 }})">{{ forloop.counter }}</button>
-            {% endfor %}
+        <div class="mt-3 bg-yellow-100 text-yellow-800 p-3 rounded-lg text-sm font-semibold">
+            Tab switch will auto submit after 3 warnings<br>
+            Do not submit before completing all questions
         </div>
     </div>
-</div>
 
+    <!-- MAIN -->
+    <div class="max-w-7xl mx-auto mt-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- LEFT -->
+        <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6">
+
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">
+                    {{ exam.title }}
+                </h2>
+
+                <div class="text-red-500 font-semibold text-lg">
+                    <span id="timer">--:--</span>
+                </div>
+            </div>
+
+            <!-- QUESTION -->
+            <div>
+                <p class="text-lg font-semibold text-gray-800">
+                    <span id="qnumber">Q1.</span>
+                    <span id="qtext"></span>
+                </p>
+
+                <!-- OPTIONS -->
+                <div id="optionsContainer" class="mt-5 space-y-4"></div>
+
+                <button onclick="saveAnswer()"
+                    class="mt-6 px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition">
+                    Save & Next
+                </button>
+            </div>
+
+            <div id="result" class="mt-6"></div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="bg-white rounded-2xl shadow-lg p-4">
+
+            <button onclick="submitExam()"
+                class="w-full mb-4 bg-red-500 text-white py-2 rounded-xl hover:bg-red-600 transition">
+                Final Submit
+            </button>
+
+            <h3 class="font-semibold mb-3 text-gray-700">Questions</h3>
+
+            <div class="grid grid-cols-5 gap-2">
+                {% for q in questions %}
+                <button id="btn{{ forloop.counter0 }}" onclick="showQuestion({{ forloop.counter0 }})"
+                    class="h-10 rounded-lg border hover:bg-indigo-100 transition font-semibold">
+                    {{ forloop.counter }}
+                </button>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
 <script>
     let currentIndex = 0;
-    let questions = {{ questions|safe }};
-    let userAnswers = {};
-    let savedAnswers = {{ saved_answers|safe }};  // <-- Comes from Django
-    let canSwitch = true;
-    let questionCountdown = 10;
-    let questionTimer;
-    const perQuestionTimerDisplay = document.getElementById("perQuestionTimer");
+    let questions = JSON.parse('{{ questions_json|escapejs }}');
 
-    // Pre-fill saved answers and button highlights
-    function preloadAnswers() {
-        questions.forEach((q, idx) => {
-            if (savedAnswers[q.id]) {
-                userAnswers[idx] = savedAnswers[q.id];
-                const btn = document.getElementById("btn" + idx);
-                if (btn) btn.style.backgroundColor = "lightgreen";
-            }
-        });
-    }
-
-    function startQuestionCountdown() {
-        clearInterval(questionTimer);
-        questionCountdown = 10;
-        lockButtons(true);
-        perQuestionTimerDisplay.innerText = `Wait for: ${questionCountdown}s`;
-
-        questionTimer = setInterval(() => {
-            questionCountdown--;
-            if (questionCountdown <= 0) {
-                clearInterval(questionTimer);
-                lockButtons(false);
-                perQuestionTimerDisplay.innerText = "✅ You can now proceed.";
-            } else {
-                perQuestionTimerDisplay.innerText = `Wait for: ${questionCountdown}s`;
-            }
-        }, 1000);
-    }
-
-    function lockButtons(state) {
-        canSwitch = !state;
-        const saveBtn = document.querySelector(".btn-save");
-        saveBtn.disabled = state;
-        saveBtn.style.backgroundColor = state ? "#ccc" : "#28a745";
-
-        document.querySelectorAll(".question-nav button").forEach(btn => {
-            btn.disabled = state;
-        });
-    }
+    let savedAnswers = JSON.parse('{{ saved_answers|escapejs }}');
+    let userAnswers = { ...savedAnswers };
 
     function showQuestion(index) {
-        if (!canSwitch) return;
-
         currentIndex = index;
         const q = questions[index];
+
         document.getElementById('qnumber').innerText = "Q" + (index + 1) + ".";
         document.getElementById('qtext').innerText = q.text;
-        document.getElementById('labelA').innerText = "A. " + q.option_a;
-        document.getElementById('labelB').innerText = "B. " + q.option_b;
-        document.getElementById('labelC').innerText = "C. " + q.option_c;
-        document.getElementById('labelD').innerText = "D. " + q.option_d;
 
-        document.querySelectorAll('input[name="option"]').forEach(el => {
-            el.checked = (userAnswers[index] === el.value);
+        const container = document.getElementById("optionsContainer");
+        container.innerHTML = "";
+
+        q.options.forEach(opt => {
+            const label = document.createElement("label");
+            label.className = "flex items-center p-3 border rounded-xl cursor-pointer hover:bg-gray-100";
+
+            label.innerHTML = `
+                <input type="radio" name="option" value="${opt.id}" class="mr-3">
+                <span>${opt.text}</span>
+            `;
+
+            container.appendChild(label);
         });
 
-        startQuestionCountdown();
+        document.querySelectorAll('input[name="option"]').forEach(el => {
+            el.checked = (userAnswers[q.id] == el.value);
+        });
     }
 
     function saveAnswer() {
         let selected = document.querySelector('input[name="option"]:checked');
-        if (selected) {
-            userAnswers[currentIndex] = selected.value;
-            document.getElementById("btn" + currentIndex).style.backgroundColor = "lightgreen";
 
-            // ✅ Send to backend immediately (AJAX auto-save)
-            fetch("{% url 'save_answer' %}", {
+        if (selected) {
+            let qid = questions[currentIndex].id;
+            userAnswers[qid] = selected.value;
+
+            document.getElementById("btn" + currentIndex)
+                .classList.add("bg-green-400", "text-white");
+
+            fetch("{% url 'exam:save_answer' %}", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -246,27 +133,19 @@
                 },
                 body: JSON.stringify({
                     participant_id: {{ participant_id }},
-                    question_id: questions[currentIndex].id,
-                    selected_option: selected.value
+                question_id: qid,
+                selected_option: selected.value
                 })
-            });
+    });
         }
 
-        if (currentIndex + 1 < questions.length) {
-            showQuestion(currentIndex + 1);
-        }
+    if (currentIndex + 1 < questions.length) {
+        showQuestion(currentIndex + 1);
+    }
     }
 
     function submitExam() {
-        saveAnswer();
-        clearInterval(timerInterval);
-        clearInterval(questionTimer);
-
-        document.querySelectorAll('input[name="option"]').forEach(el => el.disabled = true);
-        document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
-        document.querySelectorAll('.question-nav button').forEach(btn => btn.disabled = true);
-
-        fetch("{% url 'submit_exam' %}", {
+        fetch("{% url 'exam:submit_exam' %}", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -274,69 +153,63 @@
             },
             body: JSON.stringify({
                 answers: userAnswers,
-                exam_id: {{ exam.id }},
                 participant_id: {{ participant_id }}
             })
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
-            document.getElementById("result").innerHTML =
-                `<h3>✅ Result:</h3>
-                <p><b>Total Questions:</b> ${data.total}</p>
-                <p><b>Attempted Questions:</b> ${data.attempted}</p>
-                <p><b>Correct Answers:</b> ${data.correct}</p>
-                <p><b>Wrong Answers:</b> ${data.wrong}</p>`;
+            document.getElementById("result").innerHTML = `
+                <div class="bg-green-100 border p-4 rounded-xl">
+                    <h3 class="font-bold">Result</h3>
+                    <p>Score: ${data.score}</p>
+                    <p>Attempted: ${data.attempted}</p>
+                    <p>Total: ${data.total}</p>
+                </div>
+            `;
         });
     }
 
-    // Global exam timer
-    let timeLeft = {{ exam.duration }} * 60;
-    const timerElement = document.getElementById("timer");
+    // TIMER (FIXED - USE BACKEND VALUE)
+    let timeLeft = {{ remaining_seconds }};
+
     const timerInterval = setInterval(() => {
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+
+        document.getElementById("timer").innerText =
+            `${m}:${s.toString().padStart(2, '0')}`;
+
         timeLeft--;
+
         if (timeLeft < 0) {
             clearInterval(timerInterval);
-            alert("⏰ Time is up! Submitting exam.");
             submitExam();
         }
     }, 1000);
 
     window.onload = () => {
-        preloadAnswers();  // ✅ Load saved answers
-        if (questions.length > 0) {
-            showQuestion(0);
-        }
+        // highlight answered questions
+        questions.forEach((q, index) => {
+            if (userAnswers[q.id]) {
+                document.getElementById("btn" + index)
+                    .classList.add("bg-green-400", "text-white");
+            }
+        });
+
+        showQuestion(0);
     };
 
-    // Anti-tab switch
+    // basic anti-cheat
     let blurCount = 0;
+
     window.onblur = function () {
         blurCount++;
-        alert("⚠️ Don't switch tabs! Auto-submit after 3 warnings.");
+
         if (blurCount >= 3) {
-            alert("❌ Exam auto-submitted due to tab switching.");
             submitExam();
         }
     };
 
     document.addEventListener("contextmenu", e => e.preventDefault());
-    ["copy", "cut", "paste"].forEach(evt => {
-        document.addEventListener(evt, e => e.preventDefault());
-    });
-    document.addEventListener("keydown", function(e) {
-        if (
-            e.key === "F12" ||
-            (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-            (e.ctrlKey && e.key === "U")
-        ) {
-            e.preventDefault();
-        }
-    });
 </script>
-
-
-</body>
-</html>
+{% endblock %}

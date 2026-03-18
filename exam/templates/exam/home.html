@@ -1,21 +1,93 @@
-{% extends 'Base.html' %}
+{% extends "base.html" %}
 {% load static %}
-{% block content %}
-  <h2 class="text-3xl md:text-4xl text-center font-bold text-blue-800 my-10">📚 Available Exams</h2>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-5">
-    {% for exam in exams %}
-      <div class="bg-white rounded-lg shadow-md p-6 border-t-4 hover:shadow-lg transition-all duration-300 border-blue-500 hover:border-blue-700">
-        <h3 class="text-xl font-semibold text-indigo-800 mb-2"><i class="fas fa-file-alt text-indigo-500 mr-2"></i>{{ exam.title }}</h3>
-        <p class="text-sm text-gray-600 mb-4">{{ exam.description }}</p>
-        <p class="mb-1 text-sm">
-          <i class="fas fa-question-circle text-blue-400 mr-2"></i><strong>Total Questions:</strong> {{ exam.total_questions }}
-        </p>
-        <p class="mb-4 text-sm">
-          <i class="fas fa-clock text-blue-400 mr-2"></i><strong>Duration:</strong> {{ exam.duration }} minutes
-        </p>
-        <a href="{% url 'start_exam' exam.id %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm transition"><i class="fas fa-play mr-2"></i>Start Exam</a>
-      </div>
-    {% endfor %}
+{% block title %}
+Available Exams
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+
+  <!-- HEADER -->
+  <div class="text-center mb-12">
+    <h2 class="text-3xl md:text-4xl font-bold text-indigo-600">
+      Available Exams
+    </h2>
+    <p class="text-gray-500 mt-2">
+      Choose an exam and test your knowledge
+    </p>
   </div>
+
+  <!-- GRID -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    {% for exam in exams %}
+    <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition border border-gray-100 overflow-hidden">
+
+      <div class="h-1 bg-indigo-500 group-hover:bg-indigo-600 transition"></div>
+
+      <div class="p-6 flex flex-col h-full">
+
+        <!-- TITLE -->
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-file-alt text-indigo-500 mr-2"></i>
+            {{ exam.title }}
+          </h3>
+
+          {% if exam.is_active %}
+          <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">Active</span>
+          {% else %}
+          <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Inactive</span>
+          {% endif %}
+        </div>
+
+        <!-- DESCRIPTION -->
+        <p class="text-sm text-gray-500 mb-4 line-clamp-3">
+          {{ exam.description|default:"No description available." }}
+        </p>
+
+        <!-- DETAILS -->
+        <div class="space-y-2 text-sm text-gray-600 mb-6">
+
+          <div class="flex items-center">
+            <i class="fas fa-question-circle text-indigo-400 mr-2"></i>
+            <span>
+              <strong>Questions:</strong>
+              {{ exam.total_questions|default:"--" }}
+            </span>
+          </div>
+
+          <div class="flex items-center">
+            <i class="fas fa-clock text-indigo-400 mr-2"></i>
+            <span>
+              <strong>Duration:</strong>
+              {{ exam.duration }} mins
+            </span>
+          </div>
+
+        </div>
+
+        <!-- BUTTON (FIXED) -->
+        <div class="mt-auto">
+          <a href="{% url 'exam:start_exam' exam.id %}"
+            class="w-full inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-sm font-medium transition">
+            <i class="fas fa-play mr-2"></i>
+            Start Exam
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    {% empty %}
+    <div class="col-span-full flex flex-col items-center justify-center py-20 text-center">
+      <i class="fas fa-inbox text-5xl text-gray-300 mb-4"></i>
+      <p class="text-gray-500 text-lg">No exams available</p>
+      <p class="text-sm text-gray-400 mt-1">Please check back later</p>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
 {% endblock %}

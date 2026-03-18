@@ -1,7 +1,17 @@
 {% extends "admin/change_list.html" %}
+
 {% block object-tools %}
-  <div>
-    <a class="button" href="import-csv/">📥 Import CSV</a>
-  </div>
-  {{ block.super }}
+<div class="object-tools">
+
+  <ul class="object-tools">
+    <li>
+      <a href="import-csv/" class="addlink" style="background:#4f46e5;">
+        📥 Import CSV
+      </a>
+    </li>
+  </ul>
+
+</div>
+
+{{ block.super }}
 {% endblock %}
