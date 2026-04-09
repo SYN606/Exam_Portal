@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ participant.exam.title }} - Result
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 px-4 py-6">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg">
+
+        <h1 class="text-2xl font-bold text-indigo-600 mb-4">
+            Exam Result: {{ participant.exam.title }}
+        </h1>
+
+        <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-6">
+            <p><strong>Score:</strong> {{ participant.score }}</p>
+            <p><strong>Attempted Questions:</strong> {{ attempted_questions_count }} / {{ participant.exam.total_questions }}</p>
+            <p><strong>Submitted At:</strong> {{ participant.submitted_at|date:"M d, Y H:i" }}</p>
+        </div>
+
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">Questions & Answers</h2>
+
+        <div class="space-y-4">
+            {% for answer in answers %}
+            <div class="border p-4 rounded-xl bg-gray-50">
+                <p class="font-semibold text-gray-800">
+                    Q{{ forloop.counter }}: {{ answer.question.text }}
+                </p>
+
+                <ul class="mt-2 space-y-1">
+                    {% for opt in answer.question.options.all %}
+                    <li class="flex items-center">
+                        {% if answer.selected_option and answer.selected_option.id == opt.id %}
+                            {% if opt.is_correct %}
+                                <span class="text-green-600 font-semibold mr-2">&#10004;</span>
+                            {% else %}
+                                <span class="text-red-600 font-semibold mr-2">&#10008;</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="mr-2">&nbsp;&nbsp;</span>
+                        {% endif %}
+                        <span class="{% if opt.is_correct %}text-green-600{% endif %}">{{ opt.text }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-6">
+            <a href="{% url 'exam:exam_list' %}" class="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition">
+                Back to Exams
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

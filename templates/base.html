@@ -13,27 +13,49 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome CDN -->
-     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <!-- Alpine.js CDN -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     {% block extra_head %}
-
     {% endblock %}
   </head>
 
   <body class="bg-gray-100 text-gray-900">
-    <!-- Navbar Example -->
-    {% block navbar %}
-      {% include 'Navbar.html' %}
-    {% endblock %}
+
+    <!-- ✅ Navbar (UPDATED) -->
+    {% if not hide_navbar %}
+      {% block navbar %}
+        {% include 'Navbar.html' %}
+      {% endblock %}
+    {% endif %}
+
+    <!-- GLOBAL MESSAGES -->
+    {% if messages %}
+      <div class="fixed top-20 right-5 z-50 space-y-2">
+        {% for message in messages %}
+          <div 
+            x-data="{ show: true }"
+            x-init="setTimeout(() => show = false, 3000)"
+            x-show="show"
+            x-transition.opacity.duration.500ms
+            class="px-4 py-3 rounded-xl shadow-md text-sm font-medium
+            {% if message.tags == 'error' %} bg-red-100 text-red-700
+            {% elif message.tags == 'success' %} bg-green-100 text-green-700
+            {% elif message.tags == 'warning' %} bg-yellow-100 text-yellow-700
+            {% else %} bg-blue-100 text-blue-700
+            {% endif %}">
+            
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
 
     <!-- Main Content -->
     <main class="container mx-auto">
       {% block content %}
-
       {% endblock %}
     </main>
 
@@ -43,7 +65,7 @@
     {% endblock %}
 
     {% block extra_scripts %}
-
     {% endblock %}
+
   </body>
 </html>

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block navbar %}
+<!-- Navbar hidden for exam -->
+{% endblock %}
+
 {% block title %}
 {{ exam.title }}
 {% endblock %}
@@ -64,14 +68,7 @@
 
             <h3 class="font-semibold mb-3 text-gray-700">Questions</h3>
 
-            <div class="grid grid-cols-5 gap-2">
-                {% for q in questions %}
-                <button id="btn{{ forloop.counter0 }}" onclick="showQuestion({{ forloop.counter0 }})"
-                    class="h-10 rounded-lg border hover:bg-indigo-100 transition font-semibold">
-                    {{ forloop.counter }}
-                </button>
-                {% endfor %}
-            </div>
+            <div id="questionPalette" class="grid grid-cols-5 gap-2"></div>
 
         </div>
 
@@ -82,134 +79,149 @@
 
 {% block extra_scripts %}
 <script>
-    let currentIndex = 0;
-    let questions = JSON.parse('{{ questions_json|escapejs }}');
+let currentIndex = 0;
+let questions = JSON.parse('{{ questions_json|escapejs }}');
+let savedAnswers = JSON.parse('{{ saved_answers|escapejs }}');
+let userAnswers = { ...savedAnswers };
 
-    let savedAnswers = JSON.parse('{{ saved_answers|escapejs }}');
-    let userAnswers = { ...savedAnswers };
+const participantId = {{ participant_id }};
+const csrfToken = '{{ csrf_token }}';
 
-    function showQuestion(index) {
-        currentIndex = index;
-        const q = questions[index];
+function renderQuestionPalette() {
+    const container = document.getElementById("questionPalette");
+    container.innerHTML = "";
+    questions.forEach((q, index) => {
+        const btn = document.createElement("button");
+        btn.id = "btn" + index;
+        btn.innerText = index + 1;
+        btn.className = "h-10 rounded-lg border hover:bg-indigo-100 transition font-semibold";
+        btn.onclick = () => showQuestion(index);
+        container.appendChild(btn);
+    });
+}
 
-        document.getElementById('qnumber').innerText = "Q" + (index + 1) + ".";
-        document.getElementById('qtext').innerText = q.text;
+function showQuestion(index) {
+    currentIndex = index;
+    const q = questions[index];
 
-        const container = document.getElementById("optionsContainer");
-        container.innerHTML = "";
+    document.getElementById('qnumber').innerText = "Q" + (index + 1) + ".";
+    document.getElementById('qtext').innerText = q.text;
 
-        q.options.forEach(opt => {
-            const label = document.createElement("label");
-            label.className = "flex items-center p-3 border rounded-xl cursor-pointer hover:bg-gray-100";
+    const container = document.getElementById("optionsContainer");
+    container.innerHTML = "";
 
-            label.innerHTML = `
-                <input type="radio" name="option" value="${opt.id}" class="mr-3">
-                <span>${opt.text}</span>
-            `;
+    q.options.forEach(opt => {
+        const label = document.createElement("label");
+        label.className = "flex items-center p-3 border rounded-xl cursor-pointer hover:bg-gray-100";
+        label.innerHTML = `
+            <input type="radio" name="option" value="${opt.id}" class="mr-3">
+            <span>${opt.text}</span>
+        `;
+        container.appendChild(label);
+    });
 
-            container.appendChild(label);
-        });
+    document.querySelectorAll('input[name="option"]').forEach(el => {
+        el.checked = (userAnswers[q.id] == el.value);
+    });
+}
 
-        document.querySelectorAll('input[name="option"]').forEach(el => {
-            el.checked = (userAnswers[q.id] == el.value);
-        });
-    }
+function saveAnswer() {
+    let selected = document.querySelector('input[name="option"]:checked');
 
-    function saveAnswer() {
-        let selected = document.querySelector('input[name="option"]:checked');
+    if (selected) {
+        let qid = questions[currentIndex].id;
+        userAnswers[qid] = selected.value;
 
-        if (selected) {
-            let qid = questions[currentIndex].id;
-            userAnswers[qid] = selected.value;
+        document.getElementById("btn" + currentIndex)
+            .classList.add("bg-green-400", "text-white");
 
-            document.getElementById("btn" + currentIndex)
-                .classList.add("bg-green-400", "text-white");
-
-            fetch("{% url 'exam:save_answer' %}", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({
-                    participant_id: {{ participant_id }},
+        fetch("{% url 'exam:save_answer' %}", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                participant_id: participantId,
                 question_id: qid,
                 selected_option: selected.value
-                })
-    });
-        }
+            })
+        });
+    }
 
     if (currentIndex + 1 < questions.length) {
         showQuestion(currentIndex + 1);
     }
-    }
+}
 
-    function submitExam() {
-        fetch("{% url 'exam:submit_exam' %}", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({
-                answers: userAnswers,
-                participant_id: {{ participant_id }}
-            })
+function submitExam() {
+    fetch("{% url 'exam:submit_exam' %}", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            answers: userAnswers,
+            participant_id: participantId
         })
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("result").innerHTML = `
-                <div class="bg-green-100 border p-4 rounded-xl">
-                    <h3 class="font-bold">Result</h3>
-                    <p>Score: ${data.score}</p>
-                    <p>Attempted: ${data.attempted}</p>
-                    <p>Total: ${data.total}</p>
-                </div>
-            `;
-        });
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+            return;
+        }
+
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        window.location.href = "{% url 'exam:result_page' participant_id=participant_id %}";
+    });
+}
+
+let timeLeft = {{ remaining_seconds }};
+
+const timerInterval = setInterval(() => {
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+
+    document.getElementById("timer").innerText =
+        `${m}:${s.toString().padStart(2, '0')}`;
+
+    timeLeft--;
+
+    if (timeLeft < 0) {
+        clearInterval(timerInterval);
+        submitExam();
     }
+}, 1000);
 
-    // TIMER (FIXED - USE BACKEND VALUE)
-    let timeLeft = {{ remaining_seconds }};
+window.onload = () => {
+    renderQuestionPalette();
 
-    const timerInterval = setInterval(() => {
-        let m = Math.floor(timeLeft / 60);
-        let s = timeLeft % 60;
-
-        document.getElementById("timer").innerText =
-            `${m}:${s.toString().padStart(2, '0')}`;
-
-        timeLeft--;
-
-        if (timeLeft < 0) {
-            clearInterval(timerInterval);
-            submitExam();
+    questions.forEach((q, index) => {
+        if (userAnswers[q.id]) {
+            document.getElementById("btn" + index)
+                .classList.add("bg-green-400", "text-white");
         }
-    }, 1000);
+    });
 
-    window.onload = () => {
-        // highlight answered questions
-        questions.forEach((q, index) => {
-            if (userAnswers[q.id]) {
-                document.getElementById("btn" + index)
-                    .classList.add("bg-green-400", "text-white");
-            }
-        });
+    showQuestion(0);
+};
 
-        showQuestion(0);
-    };
+let blurCount = 0;
 
-    // basic anti-cheat
-    let blurCount = 0;
+window.onblur = function () {
+    blurCount++;
+    if (blurCount >= 3) {
+        submitExam();
+    }
+};
 
-    window.onblur = function () {
-        blurCount++;
-
-        if (blurCount >= 3) {
-            submitExam();
-        }
-    };
-
-    document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 </script>
 {% endblock %}
