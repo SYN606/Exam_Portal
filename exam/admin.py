@@ -20,13 +20,13 @@ class ExamAdmin(admin.ModelAdmin):
 
 
 # =======================
-# PARTICIPANT ADMIN
+# PARTICIPANT ADMIN (FIXED)
 # =======================
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ("name", "mobile", "exam", "score", "exam_date", "is_submitted")
+    list_display = ("user", "exam", "score", "exam_date", "is_submitted")
     list_filter = ("exam", "is_submitted")
-    search_fields = ("name", "mobile")
+    search_fields = ("user__username",)
     actions = ["export_as_csv"]
 
     def exam_date(self, obj):
@@ -39,13 +39,12 @@ class ParticipantAdmin(admin.ModelAdmin):
         response["Content-Disposition"] = 'attachment; filename="participants.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(["Name", "Mobile", "Exam", "Score", "Date", "Submitted"])
+        writer.writerow(["Username", "Exam", "Score", "Date", "Submitted"])
 
         for participant in queryset:
             writer.writerow(
                 [
-                    participant.name,
-                    participant.mobile,
+                    participant.user.username,
                     participant.exam.title,
                     participant.score,
                     participant.started_at.date(),
@@ -63,7 +62,7 @@ class ParticipantAdmin(admin.ModelAdmin):
 # =======================
 class OptionInline(admin.TabularInline):
     model = Option
-    extra = 4  # show 4 options by default
+    extra = 4
 
 
 # =======================
@@ -82,9 +81,6 @@ class QuestionAdmin(admin.ModelAdmin):
 
     short_text.short_description = "Question"
 
-    # =======================
-    # CUSTOM URL
-    # =======================
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -92,9 +88,6 @@ class QuestionAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    # =======================
-    # CSV IMPORT
-    # =======================
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES.get("csv_file")
@@ -120,7 +113,6 @@ class QuestionAdmin(admin.ModelAdmin):
                         exam_id=exam_id, text=row.get("question", "").strip()
                     )
 
-                    # Create options
                     options = [
                         ("A", row.get("option_a")),
                         ("B", row.get("option_b")),
