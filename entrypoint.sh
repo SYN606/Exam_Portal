@@ -3,6 +3,8 @@
 set -e
 
 echo "Applying migrations..."
+python manage.py makemigrations home
+python manage.py makemigrations exam
 python manage.py migrate --noinput
 
 echo "Collecting static files..."

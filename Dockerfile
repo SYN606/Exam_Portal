@@ -14,6 +14,8 @@ COPY . .
 
 RUN chmod +x entrypoint.sh
 
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
 ENTRYPOINT ["./entrypoint.sh"]

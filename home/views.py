@@ -15,10 +15,6 @@ def about(request):
 def contact(request):
     return render(request, 'contact.html')
 
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.shortcuts import render, redirect
-
 def register(request):
     if request.method == "POST":
         email = request.POST.get("email")
