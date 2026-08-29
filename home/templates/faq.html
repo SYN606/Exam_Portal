@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions - ExamPortal{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50/50 min-h-[calc(100vh-80px)] py-12 px-4 sm:px-6 lg:px-8" x-data="{ activeTab: 'all' }">
+    <div class="max-w-4xl mx-auto space-y-10">
+
+        <!-- HERO HEADER -->
+        <div class="text-center space-y-3 max-w-2xl mx-auto">
+            <span
+                class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-100/60 rounded-full">
+                Help Center
+            </span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                Frequently Asked Questions
+            </h1>
+            <p class="text-gray-500 text-base">
+                Have questions about taking exams, tracking scores, or technical issues? Find quick answers right here.
+            </p>
+        </div>
+
+        <!-- CATEGORY TABS -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+            <button @click="activeTab = 'all'"
+                :class="activeTab === 'all' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+                class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+                All Questions
+            </button>
+            <button @click="activeTab = 'exams'"
+                :class="activeTab === 'exams' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+                class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+                Exams & Scoring
+            </button>
+            <button @click="activeTab = 'account'"
+                :class="activeTab === 'account' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+                class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+                Account & Results
+            </button>
+            <button @click="activeTab = 'technical'"
+                :class="activeTab === 'technical' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+                class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+                Technical Issues
+            </button>
+        </div>
+
+        <!-- FAQ ACCORDION LIST -->
+        <div class="space-y-4">
+
+            <!-- FAQ Item 1 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'exams'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-question-circle text-indigo-500"></i>
+                        How do I start taking an exam on the portal?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    Navigate to the "Exams" page from the main menu, choose the test you want to attempt, and click
+                    "Start Exam". Make sure you have a stable internet connection before beginning timer-controlled
+                    exams.
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'exams'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-clock text-indigo-500"></i>
+                        What happens if my exam time runs out?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    When the countdown timer reaches zero, your answers will be automatically submitted by the system.
+                    Any questions you answered prior to expiration will be saved and evaluated.
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'account'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-history text-indigo-500"></i>
+                        Where can I review my past exam scores and answers?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    You can view all past exam submissions by clicking on your account profile dropdown and selecting
+                    <strong>Exam History</strong>. From there, click "Review" next to any exam to see a
+                    question-by-question breakdown.
+                </div>
+            </div>
+
+            <!-- FAQ Item 4 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'exams'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-redo text-indigo-500"></i>
+                        Can I retake an exam after submitting it?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    Retake permissions depend on individual exam configurations set by administrators. Practice tests
+                    generally allow multiple retakes, while formal evaluations may limit submissions to a single
+                    attempt.
+                </div>
+            </div>
+
+            <!-- FAQ Item 5 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'technical'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-wifi text-indigo-500"></i>
+                        What should I do if my connection drops mid-exam?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    Do not close your browser. Re-establish your internet connection and refresh the page. Your progress
+                    is autosaved continuously during active test sessions.
+                </div>
+            </div>
+
+            <!-- FAQ Item 6 -->
+            <div x-data="{ open: false }" x-show="activeTab === 'all' || activeTab === 'technical'"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition">
+                <button @click="open = !open"
+                    class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none">
+                    <span class="font-bold text-gray-800 text-base flex items-center gap-3">
+                        <i class="fas fa-bug text-indigo-500"></i>
+                        How do I report a error in a question or option?
+                    </span>
+                    <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform duration-200"
+                        :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-collapse
+                    class="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    If you spot a typo or incorrect option, visit our <a href="{% url 'home:contact-us' %}"
+                        class="text-indigo-600 font-semibold hover:underline">Contact Us</a> page, select the "Exam
+                    Related Issue" category, and mention the Exam Title & Question Number.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- STILL HAVE QUESTIONS CTA -->
+        <div
+            class="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-2xl p-8 text-center space-y-4 shadow-sm">
+            <h3 class="text-xl font-bold">Still have unanswered questions?</h3>
+            <p class="text-indigo-100 text-sm max-w-md mx-auto">
+                If you couldn't find your answer here, our team is ready to help you with any issue.
+            </p>
+            <a href="{% url 'home:contact-us' %}"
+                class="inline-flex items-center gap-2 bg-white text-indigo-600 font-semibold px-5 py-2.5 rounded-xl hover:bg-indigo-50 transition shadow-xs text-sm">
+                <i class="fas fa-envelope"></i> Contact Support
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

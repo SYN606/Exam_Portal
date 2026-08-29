@@ -18,18 +18,9 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Announcements
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Latest Updates
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Careers
+            <a href="{% url 'home:faq' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> FAQs
             </a>
           </li>
         </ul>
@@ -44,13 +35,9 @@
         <ul class="space-y-2 text-sm">
           {% if request.user.is_authenticated %}
           <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Student Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> My Results
+            <a href="{% url 'home:exam-history' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Exam History
             </a>
           </li>
           <li>
@@ -67,16 +54,12 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+            <a href="{% url 'home:register' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
               <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Student Registration
             </a>
           </li>
           {% endif %}
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Admit Card Download
-            </a>
-          </li>
         </ul>
       </div>
 
@@ -91,22 +74,6 @@
             <a href="{% url 'exam:exam_list' %}"
               class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
               <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Upcoming Exams
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'exam:exam_list' %}"
-              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Exam Schedule
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Syllabus & Guidelines
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Practice Papers
             </a>
           </li>
         </ul>
@@ -126,13 +93,9 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> FAQs & Help Center
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Report Technical Issue
+            <a href="{% url 'home:faq' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Help Center
             </a>
           </li>
         </ul>
@@ -165,11 +128,6 @@
       class="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center text-gray-500 text-xs gap-4">
       <div>
         © {% now "Y" %} Exam Portal. All rights reserved.
-      </div>
-      <div class="flex space-x-6">
-        <a href="#" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
-        <a href="#" class="hover:text-gray-400 transition-colors">Terms of Service</a>
-        <a href="#" class="hover:text-gray-400 transition-colors">Cookie Settings</a>
       </div>
     </div>
 

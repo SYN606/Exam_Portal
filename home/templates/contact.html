@@ -1,129 +1,172 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}
-Contact Us
-{% endblock %}
+{% block title %}Contact Us - ExamPortal{% endblock %}
 
 {% block content %}
+<div class="bg-gray-50/50 min-h-[calc(100vh-80px)] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto space-y-10">
 
-<!-- HERO -->
-<section class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-16 text-center">
-    <h1 class="text-3xl md:text-4xl font-bold">Get in Touch</h1>
-    <p class="mt-2 text-indigo-100">
-        Have questions, feedback, or need support? We’re here to help.
-    </p>
-</section>
-
-<!-- MAIN -->
-<section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-        <!-- FORM -->
-        <div class="bg-white rounded-2xl shadow-lg p-8">
-
-            <h2 class="text-xl font-semibold text-gray-800 mb-6">
-                Send us a message
-            </h2>
-
-            <!-- FIX: explicit action -->
-            <form method="post" action="{% url 'home:contact-us' %}">
-                {% csrf_token %}
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" name="name"
-                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Enter your full name" required>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" name="email"
-                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Enter your email" required>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select name="category"
-                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500">
-                        <option value="general">General Inquiry</option>
-                        <option value="support">Technical Support</option>
-                        <option value="exam">Exam Related</option>
-                        <option value="feedback">Feedback</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                    <textarea name="message" rows="4"
-                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Write your message..." required></textarea>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-medium transition">
-                    Send Message
-                </button>
-
-            </form>
-
+        <!-- HERO HEADER -->
+        <div class="text-center space-y-3 max-w-2xl mx-auto">
+            <span
+                class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-100/60 rounded-full">
+                Get In Touch
+            </span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                We'd love to hear from you
+            </h1>
+            <p class="text-gray-500 text-base md:text-lg">
+                Have questions about exams, need technical support, or want to share feedback? Send us a message and our
+                team will get back to you.
+            </p>
         </div>
 
-        <!-- RIGHT -->
-        <div class="space-y-6">
+        <!-- MAIN LAYOUT GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
-                <div class="h-12 w-12 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-xl">
-                    <i class="fas fa-headset"></i>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Support</h3>
-                    <p class="text-sm text-gray-500">
-                        Need help with exams or technical issues?
-                    </p>
-                </div>
+            <!-- CONTACT FORM (7 Cols) -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i class="fas fa-paper-plane text-indigo-600 text-lg"></i>
+                    Send us a message
+                </h2>
+
+                <form method="post" action="{% url 'home:contact-us' %}" class="space-y-5">
+                    {% csrf_token %}
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <!-- Full Name -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                                Full Name <span class="text-rose-500">*</span>
+                            </label>
+                            <input type="text" name="name"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+                                placeholder="John Doe" required>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                                Email Address <span class="text-rose-500">*</span>
+                            </label>
+                            <input type="email" name="email"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+                                placeholder="john@example.com" required>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                            Category
+                        </label>
+                        <select name="category"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="exam">Exam Related Issue</option>
+                            <option value="feedback">Feedback & Suggestions</option>
+                        </select>
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                            Message <span class="text-rose-500">*</span>
+                        </label>
+                        <textarea name="message" rows="4"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition resize-none"
+                            placeholder="How can we help you today?" required></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition shadow-sm hover:shadow-indigo-200 flex items-center justify-center gap-2">
+                        <span>Send Message</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
-                <div class="h-12 w-12 flex items-center justify-center bg-purple-100 text-purple-600 rounded-xl">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Email</h3>
-                    <!-- FIX: clickable mail -->
-                    <a href="mailto:support@examportal.com" class="text-sm text-indigo-600 hover:underline">
-                        support@examportal.com
-                    </a>
-                </div>
-            </div>
+            <!-- SIDEBAR INFO CARDS (5 Cols) -->
+            <div class="lg:col-span-5 space-y-4">
 
-            <div class="bg-white p-6 rounded-2xl shadow flex items-start gap-4">
-                <div class="h-12 w-12 flex items-center justify-center bg-green-100 text-green-600 rounded-xl">
-                    <i class="fas fa-briefcase"></i>
+                <!-- Support Card -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-4 hover:border-indigo-100 transition">
+                    <div
+                        class="h-11 w-11 flex-shrink-0 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl text-lg">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-sm">Customer Support</h3>
+                        <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                            Encountering issues during exam completion or viewing results? Reach out for priority
+                            technical support.
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Business Inquiries</h3>
-                    <p class="text-sm text-gray-500">
-                        For partnerships and integrations, contact our team.
-                    </p>
-                </div>
-            </div>
 
-            <div class="bg-indigo-600 text-white p-6 rounded-2xl shadow">
-                <h3 class="font-semibold text-lg mb-2">Why Contact Us?</h3>
-                <ul class="text-sm text-indigo-100 space-y-1">
-                    <li>Technical issues during exams</li>
-                    <li>Feedback and suggestions</li>
-                    <li>Platform support</li>
-                    <li>Business or collaboration queries</li>
-                </ul>
+                <!-- Email Card -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-4 hover:border-indigo-100 transition">
+                    <div
+                        class="h-11 w-11 flex-shrink-0 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-xl text-lg">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-sm">Direct Email</h3>
+                        <a href="mailto:support@examportal.com"
+                            class="text-xs text-indigo-600 font-semibold hover:underline block mt-0.5">
+                            support@examportal.com
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Business Card -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-4 hover:border-indigo-100 transition">
+                    <div
+                        class="h-11 w-11 flex-shrink-0 flex items-center justify-center bg-amber-50 text-amber-600 rounded-xl text-lg">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-sm">Business & Partnerships</h3>
+                        <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                            Interested in institutional access, custom exam generation, or API integrations? Contact our
+                            team.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Why Contact Banner -->
+                <div
+                    class="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md space-y-3">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fas fa-circle-info text-indigo-200"></i> Quick Assistance
+                    </h3>
+                    <ul class="text-xs text-indigo-100 space-y-2">
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-check text-indigo-300 text-[10px]"></i> Active account & password recovery
+                            assistance
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-check text-indigo-300 text-[10px]"></i> Exam timer or autosave sync
+                            troubleshooting
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-check text-indigo-300 text-[10px]"></i> General feature requests and
+                            suggestions
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
         </div>
 
     </div>
-</section>
-
+</div>
 {% endblock %}
