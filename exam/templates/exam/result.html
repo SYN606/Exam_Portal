@@ -14,7 +14,8 @@
 
         <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-6">
             <p><strong>Score:</strong> {{ participant.score }}</p>
-            <p><strong>Attempted Questions:</strong> {{ attempted_questions_count }} / {{ participant.exam.total_questions }}</p>
+            <p><strong>Attempted Questions:</strong> {{ attempted_questions_count }} / {{
+                participant.exam.total_questions }}</p>
             <p><strong>Submitted At:</strong> {{ participant.submitted_at|date:"M d, Y H:i" }}</p>
         </div>
 
@@ -30,16 +31,17 @@
                 <ul class="mt-2 space-y-1">
                     {% for opt in answer.question.options.all %}
                     <li class="flex items-center">
-                        {% if answer.selected_option and answer.selected_option.id == opt.id %}
-                            {% if opt.is_correct %}
-                                <span class="text-green-600 font-semibold mr-2">&#10004;</span>
-                            {% else %}
-                                <span class="text-red-600 font-semibold mr-2">&#10008;</span>
-                            {% endif %}
+                        {% if answer.selected_option and answer.selected_option.pk == opt.pk %}
+                        {% if opt.is_correct %}
+                        <span class="text-green-600 font-semibold mr-2">&#10004;</span>
                         {% else %}
-                            <span class="mr-2">&nbsp;&nbsp;</span>
+                        <span class="text-red-600 font-semibold mr-2">&#10008;</span>
                         {% endif %}
-                        <span class="{% if opt.is_correct %}text-green-600{% endif %}">{{ opt.text }}</span>
+                        {% else %}
+                        <span class="mr-2">&nbsp;&nbsp;</span>
+                        {% endif %}
+                        <span class="{% if opt.is_correct %}text-green-600 font-semibold{% endif %}">{{ opt.text
+                            }}</span>
                     </li>
                     {% endfor %}
                 </ul>
@@ -48,7 +50,8 @@
         </div>
 
         <div class="mt-6">
-            <a href="{% url 'exam:exam_list' %}" class="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition">
+            <a href="{% url 'exam:home' %}"
+                class="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition inline-block">
                 Back to Exams
             </a>
         </div>

@@ -7,11 +7,11 @@ Register
 
 {% block content %}
 
-<section class="min-h-[90vh] flex items-center justify-center px-4">
+<section class="min-h-[90vh] py-8 flex items-center justify-center px-4">
   <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
 
     <h2 class="text-2xl font-bold text-center text-gray-800">
-      Create an Account
+      Create a Student Account
     </h2>
 
     <p class="text-center text-gray-500 text-sm mt-2">
@@ -24,7 +24,7 @@ Register
       <!-- Username -->
       <div>
         <label class="block text-sm font-medium text-gray-600">Username</label>
-        <input type="text" name="username"
+        <input type="text" name="username" value="{{ form_data.username|default:'' }}"
           class="w-full mt-1 px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
           placeholder="Choose a username" required>
       </div>
@@ -32,9 +32,34 @@ Register
       <!-- Email -->
       <div>
         <label class="block text-sm font-medium text-gray-600">Email</label>
-        <input type="email" name="email"
+        <input type="email" name="email" value="{{ form_data.email|default:'' }}"
           class="w-full mt-1 px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
           placeholder="Enter email" required>
+      </div>
+
+      <!-- Security Question -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Security Question</label>
+        <select name="security_question"
+          class="w-full mt-1 px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+          required>
+          <option value="" disabled {% if not form_data.security_question %}selected{% endif %}>
+            Select a Question
+          </option>
+          {% for value, label in questions %}
+          <option value="{{ value }}" {% if form_data.security_question == value %}selected{% endif %}>
+            {{ label }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Security Answer -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Security Answer</label>
+        <input type="text" name="security_answer" value="{{ form_data.security_answer|default:'' }}"
+          class="w-full mt-1 px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+          placeholder="Your answer" required>
       </div>
 
       <!-- Password -->

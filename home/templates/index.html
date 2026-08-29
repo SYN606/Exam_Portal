@@ -2,104 +2,197 @@
 {% load static %}
 
 {% block title %}
-Home
+Home | Exam Portal
 {% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
-<section class="relative h-[40vh] md:h-[50vh] flex items-center justify-center text-center">
+<!-- HERO SECTION -->
+<section
+  class="relative min-h-[50vh] flex items-center justify-center text-center px-4 py-16 bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 overflow-hidden">
 
-  <!-- Background -->
-  <img src="https://images.pexels.com/photos/2570062/pexels-photo-2570062.jpeg"
-    class="absolute inset-0 w-full h-full object-cover" />
-
-  <!-- Overlay -->
-  <div class="absolute inset-0 bg-gradient-to-br from-black/70 to-indigo-900/60"></div>
+  <!-- Subtle Background Pattern -->
+  <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]">
+  </div>
 
   <!-- Content -->
-  <div class="relative z-10 px-4 max-w-2xl">
-    <h1 class="text-3xl md:text-5xl font-bold text-white leading-tight">
-      Welcome to <span class="text-indigo-400">Exam Portal</span>
+  <div class="relative z-10 max-w-3xl mx-auto">
+    <span
+      class="inline-block py-1 px-3 rounded-full bg-indigo-500/20 text-indigo-200 text-xs font-semibold uppercase tracking-wider mb-4 border border-indigo-400/30">
+      Smart Exam Preparation
+    </span>
+
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
+      Master Your Exams with <span class="text-indigo-400">Confidence</span>
     </h1>
 
-    <p class="mt-4 text-gray-200 text-sm md:text-lg">
-      Practice, analyze, and succeed with a powerful online exam platform
+    <p class="mt-4 text-gray-300 text-base sm:text-lg md:text-xl max-w-xl mx-auto font-light">
+      Practice real questions, analyze your progress in real-time, and excel with our standard testing platform.
     </p>
 
-    <!-- FIXED URL -->
-    <a href="{% url 'exam:exam_list' %}"
-      class="inline-block mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium transition shadow">
-      Get Started
-    </a>
+    <!-- DYNAMIC CTA BUTTONS -->
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'exam:exam_list' %}"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-7 py-3 rounded-xl font-semibold transition shadow-lg shadow-indigo-500/30">
+        <i class="fas fa-play-circle"></i>
+        Browse Available Exams
+      </a>
+      {% else %}
+      <a href="{% url 'home:register' %}"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-7 py-3 rounded-xl font-semibold transition shadow-lg shadow-indigo-500/30">
+        <i class="fas fa-user-plus"></i>
+        Get Started Free
+      </a>
+      <a href="{% url 'exam:exam_list' %}"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-7 py-3 rounded-xl font-semibold transition border border-white/20">
+        <i class="fas fa-file-alt"></i>
+        View Exams
+      </a>
+      {% endif %}
+    </div>
   </div>
 
 </section>
 
 
-<!-- FEATURES -->
-<section class="py-16 bg-gray-100">
-  <div class="max-w-7xl mx-auto px-4">
+<!-- STATS COUNTER BAR -->
+<section class="bg-indigo-950 border-y border-indigo-800/50 py-8 text-white">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div>
+      <div class="text-3xl font-bold text-indigo-400">100+</div>
+      <div class="text-xs sm:text-sm text-gray-400 mt-1">Practice Exams</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold text-indigo-400">10k+</div>
+      <div class="text-xs sm:text-sm text-gray-400 mt-1">Questions Available</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold text-indigo-400">99.9%</div>
+      <div class="text-xs sm:text-sm text-gray-400 mt-1">Uptime Reliability</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold text-indigo-400">Instant</div>
+      <div class="text-xs sm:text-sm text-gray-400 mt-1">Score Evaluation</div>
+    </div>
+  </div>
+</section>
 
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
-        Your Gateway to <span class="text-indigo-600">Success</span>
+
+<!-- FEATURES GRID -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+        Everything You Need to <span class="text-indigo-600">Succeed</span>
       </h2>
-      <p class="mt-3 text-gray-500">
-        Everything you need to prepare and perform better
+      <p class="mt-3 text-gray-600 text-base">
+        A comprehensive toolkit built to optimize your study routine and maximize test scores.
       </p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-book-open text-indigo-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Previous Year Papers</h3>
-        <p class="text-gray-500 text-sm">
-          Practice real exam questions to understand patterns and improve accuracy.
-        </p>
+      <!-- Feature 1 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 mb-4 text-xl">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Previous Year Papers</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Practice past test sets to recognize recurring patterns, question trends, and time limitations.
+          </p>
+        </div>
       </div>
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-shield-alt text-green-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Reliable Preparation</h3>
-        <p class="text-gray-500 text-sm">
-          Build confidence with structured tests and consistent evaluation.
-        </p>
+      <!-- Feature 2 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div
+            class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4 text-xl">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Structured Preparation</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Gain confidence with categorized tests, subject-wise modules, and clear scoring criteria.
+          </p>
+        </div>
       </div>
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-laptop-code text-purple-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Digital Exam Experience</h3>
-        <p class="text-gray-500 text-sm">
-          Simulate real exam conditions with a clean and distraction-free interface.
-        </p>
+      <!-- Feature 3 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-purple-50 text-purple-600 mb-4 text-xl">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Digital Exam Simulator</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Experience real test conditions with timed modules and a distraction-free student portal.
+          </p>
+        </div>
       </div>
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-user-graduate text-pink-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Focused Study Content</h3>
-        <p class="text-gray-500 text-sm">
-          Learn exactly what matters with exam-oriented material.
-        </p>
+      <!-- Feature 4 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-pink-50 text-pink-600 mb-4 text-xl">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Exam-Oriented Content</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Focus strictly on high-yield topics carefully selected by experienced educators.
+          </p>
+        </div>
       </div>
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-chart-line text-yellow-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Performance Insights</h3>
-        <p class="text-gray-500 text-sm">
-          Track your improvement with meaningful feedback and analytics.
-        </p>
+      <!-- Feature 5 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-50 text-amber-600 mb-4 text-xl">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Detailed Analytics</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Review detailed performance breakdowns, identify weak topics, and track score trends over time.
+          </p>
+        </div>
       </div>
 
-      <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition p-6 border border-gray-100">
-        <i class="fas fa-pen-alt text-red-500 text-3xl mb-4"></i>
-        <h3 class="text-lg font-semibold mb-2">Mock Test Simulator</h3>
-        <p class="text-gray-500 text-sm">
-          Take timed tests and get instant evaluation to boost your performance.
-        </p>
+      <!-- Feature 6 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-200 p-6 border border-gray-100 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-red-50 text-red-600 mb-4 text-xl">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Instant Evaluation</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Get immediate results upon submission, complete with answer keys and explanations.
+          </p>
+        </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- CALL TO ACTION BANNER -->
+<section class="py-16 bg-white border-t border-gray-200">
+  <div class="max-w-5xl mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold text-gray-900">Ready to test your knowledge?</h2>
+    <p class="mt-3 text-gray-600">Join thousands of students preparing for their upcoming exams.</p>
+    <div class="mt-6">
+      <a href="{% url 'exam:exam_list' %}"
+        class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition shadow-md">
+        <i class="fas fa-arrow-right"></i> Start Practicing Now
+      </a>
     </div>
   </div>
 </section>

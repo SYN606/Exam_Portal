@@ -1,116 +1,177 @@
-<footer class="bg-gray-900 text-white py-16">
+<footer class="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="flex flex-wrap -mx-4">
 
-      <!-- Portal -->
-      <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
+    <!-- GRID LAYOUT -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+      <!-- COLUMN 1: PORTAL INFO -->
+      <div>
         <h4
           class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
           Exam Portal
         </h4>
-        <ul>
-          <li class="mb-2">
-            <a href="{% url 'home:about-us' %}" class="text-gray-400 hover:text-white transition">About Portal</a>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="{% url 'home:about-us' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> About Portal
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Announcements</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Announcements
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Latest Updates</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Latest Updates
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Careers</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Careers
+            </a>
           </li>
         </ul>
       </div>
 
-      <!-- Students -->
-      <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
+      <!-- COLUMN 2: STUDENTS -->
+      <div>
         <h4
           class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
           Students
         </h4>
-        <ul>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Register</a>
+        <ul class="space-y-2 text-sm">
+          {% if request.user.is_authenticated %}
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Student Dashboard
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Login</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> My Results
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Admit Card</a>
+          <li>
+            <a href="{% url 'home:logout' %}"
+              class="text-gray-400 hover:text-red-400 transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-red-400"></i> Logout
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Results</a>
+          {% else %}
+          <li>
+            <a href="{% url 'home:login' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Login
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Student Registration
+            </a>
+          </li>
+          {% endif %}
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Admit Card Download
+            </a>
           </li>
         </ul>
       </div>
 
-      <!-- Exams -->
-      <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-10 md:mb-0">
+      <!-- COLUMN 3: EXAMINATIONS -->
+      <div>
         <h4
           class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
           Examinations
         </h4>
-        <ul>
-          <li class="mb-2">
-            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Upcoming Exams</a>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="{% url 'exam:exam_list' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Upcoming Exams
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Exam Schedule</a>
+          <li>
+            <a href="{% url 'exam:exam_list' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Exam Schedule
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Syllabus</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Syllabus & Guidelines
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="{% url 'exam:exam_list' %}" class="text-gray-400 hover:text-white transition">Previous Papers</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Practice Papers
+            </a>
           </li>
         </ul>
       </div>
 
-      <!-- Support -->
-      <div class="w-full md:w-1/2 lg:w-1/4 px-4">
+      <!-- COLUMN 4: SUPPORT & SOCIAL -->
+      <div>
         <h4
           class="text-lg font-semibold mb-6 relative after:content-[''] after:block after:w-12 after:h-0.5 after:bg-indigo-500 after:mt-2">
           Support
         </h4>
-        <ul>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Help Center</a>
+        <ul class="space-y-2 text-sm mb-6">
+          <li>
+            <a href="{% url 'home:contact-us' %}"
+              class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Contact Us
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">FAQs</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> FAQs & Help Center
+            </a>
           </li>
-          <li class="mb-2">
-            <a href="{% url 'home:contact-us' %}" class="text-gray-400 hover:text-white transition">Contact Us</a>
-          </li>
-          <li class="mb-2">
-            <a href="#" class="text-gray-400 hover:text-white transition">Report Issue</a>
+          <li>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+              <i class="fas fa-chevron-right text-xs text-indigo-400"></i> Report Technical Issue
+            </a>
           </li>
         </ul>
 
         <!-- Social Icons -->
-        <div class="flex space-x-4 mt-6">
-          <a href="#"
-            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
-            <i class="fab fa-facebook-f"></i>
+        <div class="flex space-x-3">
+          <a href="#" aria-label="Facebook"
+            class="h-9 w-9 flex items-center justify-center rounded-full bg-gray-800 text-gray-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+            <i class="fab fa-facebook-f text-sm"></i>
           </a>
-          <a href="#"
-            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
-            <i class="fab fa-twitter"></i>
+          <a href="#" aria-label="Twitter"
+            class="h-9 w-9 flex items-center justify-center rounded-full bg-gray-800 text-gray-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+            <i class="fab fa-x-twitter text-sm"></i>
           </a>
-          <a href="#"
-            class="h-10 w-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white hover:text-gray-900 transition">
-            <i class="fab fa-linkedin-in"></i>
+          <a href="#" aria-label="LinkedIn"
+            class="h-9 w-9 flex items-center justify-center rounded-full bg-gray-800 text-gray-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+            <i class="fab fa-linkedin-in text-sm"></i>
+          </a>
+          <a href="#" aria-label="GitHub"
+            class="h-9 w-9 flex items-center justify-center rounded-full bg-gray-800 text-gray-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+            <i class="fab fa-github text-sm"></i>
           </a>
         </div>
       </div>
 
     </div>
 
-    <!-- Bottom -->
-    <div class="border-t border-gray-700 mt-12 pt-6 text-center text-gray-500 text-sm">
-      © 2026 Exam Portal. All rights reserved.
+    <!-- BOTTOM BAR -->
+    <div
+      class="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center text-gray-500 text-xs gap-4">
+      <div>
+        © {% now "Y" %} Exam Portal. All rights reserved.
+      </div>
+      <div class="flex space-x-6">
+        <a href="#" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Cookie Settings</a>
+      </div>
     </div>
+
   </div>
 </footer>

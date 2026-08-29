@@ -1,5 +1,4 @@
 JAZZMIN_SETTINGS = {
-
     # Branding
     "site_title":
     "Exam Portal Admin",
@@ -8,84 +7,94 @@ JAZZMIN_SETTINGS = {
     "site_brand":
     "Exam Portal",
     "welcome_sign":
-    "Manage exams, students, and results",
+    "Welcome to Exam Portal Management",
     "copyright":
     "Exam Portal",
+
+    # Search & User Menu
+    "search_model": ["exam.Exam", "auth.User"],
+    "user_avatar":
+    None,
 
     # Sidebar
     "show_sidebar":
     True,
     "navigation_expanded":
     True,
+    "hide_apps": [],
+    "hide_models": [],
 
-    # App & Model Order
+    # App & Model Ordering
     "order_with_respect_to": [
-        "exams",
+        "exam",
+        "home",
+        "auth",
     ],
 
-    # Icons
+    # FontAwesome Icons (Updated for exact app names: 'exam', 'home', 'auth')
     "icons": {
-        "exams.Exam": "fas fa-file-alt",
-        "exams.Subject": "fas fa-book",
-        "exams.Question": "fas fa-question-circle",
-        "students.Student": "fas fa-user-graduate",
-        "teachers.Teacher": "fas fa-chalkboard-teacher",
-        "results.Result": "fas fa-chart-line",
-        "results.Attendance": "fas fa-calendar-check",
+        # Exam App Models
+        "exam.Exam": "fas fa-file-alt",
+        "exam.Question": "fas fa-question-circle",
+        "exam.Option": "fas fa-list-ul",
+        "exam.Participant": "fas fa-user-graduate",
+        "exam.ParticipantAnswer": "fas fa-tasks",
+
+        # Core Auth & Django Models
         "auth.User": "fas fa-user-shield",
         "auth.Group": "fas fa-users-cog",
     },
 
-    # Top Menu
+    # Top Navigation Bar Links
     "topmenu_links": [
         {
             "name": "Dashboard",
-            "url": "/admin",
-            "new_window": False,
+            "url": "admin:index",
+            "permissions": ["auth.view_user"],
         },
         {
-            "name": "View Website",
-            "url": "/",
+            "name": "View Site",
+            "url": "home:homepage",
             "new_window": True,
         },
     ],
 
-    # UI Cleanup
-    "hide_apps": [],
-    "hide_models": [],
-
-    # Customization
+    # UI Behaviors
     "show_ui_builder":
     False,
     "changeform_format":
     "horizontal_tabs",
     "related_modal_active":
     True,
+    "use_google_fonts_roboo":
+    True,
 }
 
 JAZZMIN_UI_TWEAKS = {
+    # Light Theme Selection
+    "theme": "flatly",
+    "dark_mode_theme": None,
 
-    # Theme
-    "theme": "cyborg",
-    "dark_mode_theme": "cyborg",
+    # Navbar Styling (Clean White Header)
+    "navbar": "navbar-white navbar-light border-bottom",
 
-    # Navbar
-    "navbar": "navbar-dark navbar-primary",
-
-    # Sidebar
-    "sidebar": "sidebar-dark-primary",
+    # Sidebar Styling (Light Slate Sidebar with Indigo Selection)
+    "sidebar": "sidebar-light-indigo",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
 
-    # Brand
-    "brand_colour": "navbar-primary",
+    # Brand Logo Area
+    "brand_colour": "navbar-indigo",
 
-    # Accent
-    "accent": "accent-primary",
+    # UI Accent Colors
+    "accent": "accent-indigo",
 
-    # Buttons
+    # Button Design
     "button_classes": {
-        "primary": "btn-primary",
+        "primary": "btn-indigo text-white",
         "secondary": "btn-outline-secondary",
         "info": "btn-info",
         "warning": "btn-warning",
@@ -93,7 +102,7 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 
-    # Misc
+    # Typography Tweaks
     "navbar_small_text": False,
     "footer_small_text": False,
     "body_small_text": False,

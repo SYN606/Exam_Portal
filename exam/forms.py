@@ -43,7 +43,6 @@ class ParticipantForm(forms.ModelForm):
             try:
                 participant = Participant.objects.get(mobile=mobile, exam=self.exam)
 
-                # ❌ block only if already submitted
                 if participant.is_submitted:
                     raise forms.ValidationError("You have already submitted this exam.")
 

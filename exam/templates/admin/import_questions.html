@@ -1,63 +1,107 @@
 {% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; {% translate 'Import CSV' %}
+</div>
+{% endblock %}
 
 {% block content %}
-<div style="max-width: 700px; margin: 40px auto;">
+<div class="container-fluid py-3">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      
+      <div class="card shadow-sm border-0 rounded-lg">
+        <div class="card-header bg-white border-bottom py-3">
+          <h3 class="card-title font-weight-bold text-dark mb-0">
+            <i class="fas fa-file-import text-indigo mr-2"></i> Bulk Import Questions
+          </h3>
+        </div>
 
-  <!-- CARD -->
-  <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+        <div class="card-body p-4">
+          <p class="text-muted mb-4">
+            Upload a structured CSV file to import multiple questions and answer choices simultaneously into an existing exam.
+          </p>
 
-    <!-- TITLE -->
-    <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 10px;">
-      📥 Import Questions
-    </h2>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    <p style="color: #666; margin-bottom: 20px;">
-      Upload a CSV file to bulk import questions into an exam.
-    </p>
+            <!-- EXAM SELECTION -->
+            <div class="form-group mb-4">
+              <label for="exam_id" class="font-weight-bold text-dark">
+                Target Exam <span class="text-danger">*</span>
+              </label>
+              <select name="exam_id" id="exam_id" class="form-control custom-select" required>
+                <option value="" disabled selected>-- Select an Exam --</option>
+                {% for exam in exams %}
+                  <option value="{{ exam.id }}">{{ exam.title }}</option>
+                {% endfor %}
+              </select>
+            </div>
 
-    <!-- FORM -->
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+            <!-- FILE UPLOAD -->
+            <div class="form-group mb-4">
+              <label for="csv_file" class="font-weight-bold text-dark">
+                CSV Document <span class="text-danger">*</span>
+              </label>
+              <div class="custom-file">
+                <input type="file" name="csv_file" id="csv_file" class="custom-file-input" accept=".csv" required>
+                <label class="custom-file-label" for="csv_file">Choose file...</label>
+              </div>
+            </div>
 
-      <!-- EXAM SELECT -->
-      <div style="margin-bottom: 20px;">
-        <label style="font-weight: 500;">Select Exam</label><br>
-        <select name="exam_id" required
-          style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
-          {% for exam in exams %}
-          <option value="{{ exam.id }}">{{ exam.title }}</option>
-          {% endfor %}
-        </select>
+            <!-- FORMAT SPECIFICATION -->
+            <div class="callout callout-info bg-light border-left-indigo p-3 mb-4 rounded">
+              <h5 class="text-indigo font-weight-bold h6 mb-2">
+                <i class="fas fa-info-circle mr-1"></i> Expected CSV Format
+              </h5>
+              <p class="text-muted small mb-2">Columns must follow this order precisely:</p>
+              
+              <code class="d-block p-2 bg-white rounded border border-light text-dark font-weight-bold mb-2">
+                question,option_a,option_b,option_c,option_d,correct_option
+              </code>
+              
+              <p class="text-muted small mb-1">Example row:</p>
+              <code class="d-block p-2 bg-white rounded border border-light text-secondary">
+                What is 2+2?,1,2,3,4,D
+              </code>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="d-flex align-items-center justify-content-end gap-2 pt-2">
+              <a href="{% url opts|admin_urlname:'changelist' %}" class="btn btn-outline-secondary mr-2">
+                <i class="fas fa-times mr-1"></i> Cancel
+              </a>
+              <button type="submit" class="btn btn-indigo text-white font-weight-bold px-4">
+                <i class="fas fa-file-upload mr-1"></i> Process & Import
+              </button>
+            </div>
+
+          </form>
+        </div>
       </div>
 
-      <!-- FILE INPUT -->
-      <div style="margin-bottom: 20px;">
-        <label style="font-weight: 500;">Upload CSV File</label><br>
-        <input type="file" name="csv_file" accept=".csv" required style="margin-top: 5px;">
-      </div>
-
-      <!-- FORMAT GUIDE -->
-      <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px;">
-        <strong>📄 CSV Format:</strong><br>
-        <code>
-          question,option_a,option_b,option_c,option_d,correct_option
-        </code>
-        <br><br>
-        Example:<br>
-        <code>
-          What is 2+2?,1,2,3,4,D
-        </code>
-      </div>
-
-      <!-- BUTTON -->
-      <button type="submit"
-        style="background: #4f46e5; color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">
-        🚀 Upload & Import
-      </button>
-
-    </form>
-
+    </div>
   </div>
-
 </div>
+
+<script>
+  // Bootstrap custom file input handler to show filename on select
+  document.addEventListener('DOMContentLoaded', function () {
+    var fileInput = document.getElementById('csv_file');
+    if (fileInput) {
+      fileInput.addEventListener('change', function (e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : 'Choose file...';
+        var label = e.target.nextElementSibling;
+        if (label) {
+          label.textContent = fileName;
+        }
+      });
+    }
+  });
+</script>
 {% endblock %}
