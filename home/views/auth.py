@@ -4,6 +4,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, auth
 from django.contrib import messages
 
 from home.models import User
+from home.forms import LoginForm, RegisterForm, ResetPasswordStep1Form, ResetPasswordStep2Form
 
 
 class RegisterView(View):
@@ -13,59 +14,36 @@ class RegisterView(View):
         if request.user.is_authenticated:
             return redirect("home:homepage")
 
-        return render(request, self.template_name,
-                      {"questions": User.SecurityQuestion.choices})
+        return render(request, self.template_name, {
+            "questions": User.SecurityQuestion.choices
+        })
 
     def post(self, request):
         if request.user.is_authenticated:
             return redirect("home:homepage")
 
-        email = request.POST.get("email", "").strip()
-        username = request.POST.get("username", "").strip()
-        password1 = request.POST.get("password1", "")
-        password2 = request.POST.get("password2", "")
-        question = request.POST.get("security_question", "")
-        answer = request.POST.get("security_answer", "").strip()
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, "Student account created successfully! Please login.")
+            return redirect("home:login")
+
+        # Report all validation errors via messages
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, error)
 
         context = {
             "questions": User.SecurityQuestion.choices,
             "form_data": {
-                "username": username,
-                "email": email,
-                "security_question": question,
-                "security_answer": answer
+                "username": request.POST.get("username", "").strip(),
+                "email": request.POST.get("email", "").strip(),
+                "security_question": request.POST.get("security_question", ""),
+                "security_answer": request.POST.get("security_answer", "").strip(),
             }
         }
-
-        if password1 != password2:
-            messages.error(request, "Passwords do not match!")
-            return render(request, self.template_name, context)
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already taken!")
-            return render(request, self.template_name, context)
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already registered!")
-            return render(request, self.template_name, context)
-
-        if not question or not answer:
-            messages.error(request,
-                           "Security question and answer are required!")
-            return render(request, self.template_name, context)
-
-        # Enforce STUDENT role strictly for public registrations
-        user = User.objects.create_user(username=username,
-                                        email=email,
-                                        password=password1,
-                                        role=User.Role.STUDENT)
-        user.security_question = question
-        user.set_security_answer(answer)
-        user.save()
-
-        messages.success(
-            request, "Student account created successfully! Please login.")
-        return redirect("home:login")
+        return render(request, self.template_name, context)
 
 
 class LoginView(View):
@@ -80,30 +58,33 @@ class LoginView(View):
         if request.user.is_authenticated:
             return redirect("home:homepage")
 
+        form = LoginForm(request.POST)
         username = request.POST.get("username", "").strip()
-        password = request.POST.get("password", "")
 
-        user = authenticate(request, username=username, password=password)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            auth_login(request, user)
-            messages.success(request, f"Welcome back, {user.username}!")
-            return redirect("home:homepage")
+            if user is not None:
+                auth_login(request, user)
+                messages.success(request, f"Welcome back, {user.username}!")
+                return redirect("home:homepage")
 
         messages.error(request, "Invalid username or password")
         return render(request, self.template_name, {"username": username})
 
 
 class LogoutView(View):
-
-    def get(self, request):
+    def post(self, request):
         if request.user.is_authenticated:
             auth_logout(request)
             messages.success(request, "You've been logged out successfully")
         return redirect("home:homepage")
 
-    def post(self, request):
-        return self.get(request)
+    def get(self, request):
+        messages.warning(request, "Logout must be submitted via a POST request.")
+        return redirect("home:homepage")
 
 
 class SecurityResetPasswordView(View):
@@ -124,68 +105,69 @@ class SecurityResetPasswordView(View):
 
         # STEP 1: Verify username and check for security setup
         if step == "1":
+            form = ResetPasswordStep1Form(request.POST)
+            if not form.is_valid():
+                messages.error(request, "Please enter a valid username.")
+                return render(request, self.template_name, {"step": 1})
+
+            username = form.cleaned_data["username"].strip()
+            user = User.objects.filter(username=username).first()
+
+            if not user or not user.security_question:
+                messages.error(request, "Account not found or password recovery is not configured for this user.")
+                return render(request, self.template_name, {
+                    "step": 1,
+                    "username": username
+                })
+
+            question_label = user.get_security_question_display()
+            return render(
+                request, self.template_name, {
+                    "step": 2,
+                    "username": username,
+                    "question_display": question_label
+                })
+
+        # STEP 2: Validate security answer and process new password
+        elif step == "2":
             username = request.POST.get("username", "").strip()
-            try:
-                user = User.objects.get(username=username)
-                if not user.security_question:
-                    messages.error(request,
-                                   "No security question set for this user.")
-                    return render(request, self.template_name, {"step": 1})
+            user = User.objects.filter(username=username).first()
+            question_label = (user.get_security_question_display()
+                              if user and user.security_question else "")
 
-                question_label = getattr(user,
-                                         "get_security_question_display")()
-
+            form = ResetPasswordStep2Form(request.POST)
+            if not form.is_valid():
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
                 return render(
                     request, self.template_name, {
                         "step": 2,
                         "username": username,
                         "question_display": question_label
                     })
-            except User.DoesNotExist:
-                messages.error(request, "Username not found.")
-                return render(request, self.template_name, {
-                    "step": 1,
-                    "username": username
-                })
 
-        # STEP 2: Validate security answer and process new password
-        elif step == "2":
-            username = request.POST.get("username", "").strip()
-            answer = request.POST.get("security_answer", "").strip()
-            new_password = request.POST.get("new_password", "")
-            confirm_password = request.POST.get("confirm_password", "")
-
-            try:
-                user = User.objects.get(username=username)
-                question_label = getattr(user,
-                                         "get_security_question_display")()
-
-                if new_password != confirm_password:
-                    messages.error(request, "Passwords do not match!")
-                    return render(
-                        request, self.template_name, {
-                            "step": 2,
-                            "username": username,
-                            "question_display": question_label
-                        })
-
-                if user.check_security_answer(answer):
-                    user.set_password(new_password)
-                    user.save()
-                    messages.success(
-                        request,
-                        "Password reset successfully! You can now log in.")
-                    return redirect("home:login")
-                else:
-                    messages.error(request, "Incorrect security answer.")
-                    return render(
-                        request, self.template_name, {
-                            "step": 2,
-                            "username": username,
-                            "question_display": question_label
-                        })
-            except User.DoesNotExist:
+            if not user:
                 messages.error(request, "An error occurred. Please try again.")
                 return redirect("home:login")
+
+            security_answer = form.cleaned_data["security_answer"]
+            new_password = form.cleaned_data["new_password"]
+
+            if user.check_security_answer(security_answer):
+                user.set_password(new_password)
+                user.save()
+                messages.success(
+                    request,
+                    "Password reset successfully! You can now log in.")
+                return redirect("home:login")
+            else:
+                messages.error(request, "Incorrect security answer.")
+                return render(
+                    request, self.template_name, {
+                        "step": 2,
+                        "username": username,
+                        "question_display": question_label
+                    })
 
         return redirect("home:login")

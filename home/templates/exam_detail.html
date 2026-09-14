@@ -1,110 +1,284 @@
 {% extends "base.html" %}
 
-{% block title %}{{ participant.exam.title }} — Review{% endblock %}
+{% block title %}{{ participant.exam.title }} — Detailed Result Review{% endblock %}
 
 {% block content %}
-<div class="bg-gray-50/50 min-h-[calc(100vh-80px)] py-10 px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50/50 min-h-[calc(100vh-80px)] py-8 px-4 sm:px-6 lg:px-8" x-data="{ filter: 'all' }">
     <div class="max-w-4xl mx-auto space-y-6">
 
-        <!-- HEADER BANNER -->
-        <div
-            class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="space-y-1">
-                <a href="{% url 'home:exam-history' %}"
-                    class="inline-flex items-center gap-2 text-sm text-indigo-600 font-medium hover:text-indigo-800 transition mb-2">
-                    <i class="fas fa-arrow-left text-xs"></i> Back to History
-                </a>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">
-                    {{ participant.exam.title }}
-                </h1>
-                <p class="text-xs text-gray-500">
-                    Submitted on {{ participant.submitted_at|date:"M d, Y • h:i A" }}
-                </p>
-            </div>
+        <!-- NAVIGATION BREADCRUMB -->
+        <div class="flex items-center justify-between">
+            <a href="{% url 'home:student-dashboard' %}"
+                class="inline-flex items-center gap-2 text-sm text-indigo-600 font-semibold hover:text-indigo-800 transition">
+                <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
+            </a>
+            <span class="text-xs text-gray-400">
+                Attempted on {{ participant.started_at|date:"M d, Y" }}
+            </span>
+        </div>
 
-            <div
-                class="flex items-center gap-3 bg-indigo-50 border border-indigo-100 px-5 py-3 rounded-2xl self-start md:self-auto">
-                <i class="fas fa-trophy text-indigo-600 text-xl"></i>
+        <!-- EXAM PERFORMANCE SCORECARD -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-md space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5">
                 <div>
-                    <span class="text-xs uppercase tracking-wider font-semibold text-indigo-500 block">Final
-                        Score</span>
-                    <span class="text-2xl font-extrabold text-indigo-700">{{ participant.score }}</span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+                        {{ participant.exam.title }}
+                    </h1>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                        Submitted on {{ participant.submitted_at|date:"M d, Y • h:i A" }}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-indigo-100/60 border border-indigo-200/80 px-6 py-3 rounded-2xl self-start md:self-auto shadow-2xs">
+                    <i class="fas fa-trophy text-indigo-600 text-2xl"></i>
+                    <div>
+                        <span class="text-[11px] uppercase tracking-wider font-bold text-indigo-500 block">Final Score</span>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-2xl sm:text-3xl font-black text-indigo-700">{{ participant.score }}</span>
+                            <span class="text-xs font-semibold text-gray-400">/ {{ participant.exam.total_marks }}</span>
+                            <span class="text-xs font-bold text-indigo-600 ml-1">({{ score_percent }}%)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- METRIC PILLS -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="p-3 bg-gray-50 border border-gray-100 rounded-2xl text-center">
+                    <span class="text-xs text-gray-400 font-semibold block uppercase tracking-wider">Total Questions</span>
+                    <span class="text-xl font-bold text-gray-800 mt-0.5 block">{{ total_questions }}</span>
+                </div>
+                <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-2xl text-center">
+                    <span class="text-xs text-emerald-600 font-semibold block uppercase tracking-wider">Correct</span>
+                    <span class="text-xl font-bold text-emerald-700 mt-0.5 block">{{ participant.total_correct }}</span>
+                </div>
+                <div class="p-3 bg-rose-50 border border-rose-100 rounded-2xl text-center">
+                    <span class="text-xs text-rose-600 font-semibold block uppercase tracking-wider">Incorrect</span>
+                    <span class="text-xl font-bold text-rose-700 mt-0.5 block">{{ participant.total_wrong }}</span>
+                </div>
+                <div class="p-3 bg-amber-50 border border-amber-100 rounded-2xl text-center">
+                    <span class="text-xs text-amber-600 font-semibold block uppercase tracking-wider">Skipped</span>
+                    <span class="text-xl font-bold text-amber-700 mt-0.5 block">{{ participant.total_unanswered }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTER TABS -->
+        <div class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm text-sm font-semibold">
+            <button @click="filter = 'all'"
+                :class="filter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
+                class="px-4 py-2 rounded-xl transition">
+                All Questions ({{ answers|length }})
+            </button>
+            <button @click="filter = 'correct'"
+                :class="filter === 'correct' ? 'bg-emerald-600 text-white shadow-sm' : 'text-emerald-700 hover:bg-emerald-50'"
+                class="px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                <i class="fas fa-check text-xs"></i> Correct ({{ participant.total_correct }})
+            </button>
+            <button @click="filter = 'incorrect'"
+                :class="filter === 'incorrect' ? 'bg-rose-600 text-white shadow-sm' : 'text-rose-700 hover:bg-rose-50'"
+                class="px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                <i class="fas fa-times text-xs"></i> Mistakes ({{ participant.total_wrong }})
+            </button>
+            <button @click="filter = 'unanswered'"
+                :class="filter === 'unanswered' ? 'bg-amber-500 text-white shadow-sm' : 'text-amber-700 hover:bg-amber-50'"
+                class="px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                <i class="fas fa-minus text-xs"></i> Skipped ({{ participant.total_unanswered }})
+            </button>
         </div>
 
         <!-- QUESTIONS REVIEW LIST -->
         <div class="space-y-4">
             {% for ans in answers %}
-            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-4">
+            {% if not ans.selected_option %}
+                {% with item_category='unanswered' %}
+                <div x-show="filter === 'all' || filter === '{{ item_category }}'"
+                    class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4 transition">
+                    
+                    <!-- Question Header -->
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-900 leading-snug">
+                            <span class="text-indigo-600 font-bold mr-1">Q{{ forloop.counter }}.</span>
+                            {{ ans.question.text }}
+                        </h2>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 whitespace-nowrap">
+                            <i class="fas fa-exclamation-triangle text-amber-500"></i> Skipped
+                        </span>
+                    </div>
 
-                <!-- Question Header -->
-                <div class="flex items-start justify-between gap-3">
-                    <h2 class="text-base sm:text-lg font-semibold text-gray-800 leading-snug">
-                        <span class="text-indigo-600 font-bold mr-1">Q{{ forloop.counter }}.</span>
-                        {{ ans.question.text }}
-                    </h2>
-
-                    {% if not ans.selected_option %}
-                    <span
-                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 whitespace-nowrap">
-                        <i class="fas fa-exclamation-triangle text-amber-500"></i> Unattempted
-                    </span>
-                    {% endif %}
-                </div>
-
-                <!-- Options Grid -->
-                <div class="space-y-2.5">
-                    {% for opt in ans.question.options.all %}
-                    <div class="p-4 rounded-xl border text-sm sm:text-base transition flex items-center justify-between gap-3
-                        {% if opt.is_correct %}
-                            bg-emerald-50/80 border-emerald-300 text-emerald-900 font-medium
-                        {% elif ans.selected_option == opt and not opt.is_correct %}
-                            bg-rose-50/80 border-rose-300 text-rose-900 font-medium
-                        {% else %}
-                            bg-gray-50 border-gray-200/70 text-gray-600
-                        {% endif %}">
-
-                        <div class="flex items-center gap-3">
+                    <!-- Options Grid -->
+                    <div class="space-y-2.5">
+                        {% for opt in ans.question.options.all %}
+                        <div class="p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base transition flex items-center justify-between gap-3
                             {% if opt.is_correct %}
-                            <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
-                            {% elif ans.selected_option == opt and not opt.is_correct %}
-                            <i class="fas fa-times-circle text-rose-600 text-lg"></i>
+                                bg-emerald-50 border-emerald-300 text-emerald-900 font-medium
                             {% else %}
-                            <i class="far fa-circle text-gray-300 text-lg"></i>
+                                bg-gray-50/70 border-gray-200/70 text-gray-600
+                            {% endif %}">
+                            <div class="flex items-center gap-3">
+                                {% if opt.is_correct %}
+                                <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
+                                {% else %}
+                                <i class="far fa-circle text-gray-300 text-lg"></i>
+                                {% endif %}
+                                <span>{{ opt.text }}</span>
+                            </div>
+                            {% if opt.is_correct %}
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white">
+                                Correct Answer
+                            </span>
                             {% endif %}
-                            <span>{{ opt.text }}</span>
                         </div>
-
-                        <!-- Status Badges -->
-                        {% if opt.is_correct %}
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white shadow-xs">
-                            Correct Option
-                        </span>
-                        {% elif ans.selected_option == opt and not opt.is_correct %}
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-600 text-white shadow-xs">
-                            Your Choice (Incorrect)
-                        </span>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
 
-                <!-- EXPLANATION SECTION -->
-                {% if ans.question.explanation %}
-                <div class="mt-4 p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 text-sm space-y-1">
-                    <div class="flex items-center gap-2 text-indigo-900 font-bold">
-                        <i class="fas fa-lightbulb text-amber-500"></i>
-                        <span>Explanation</span>
+                    <!-- EXPLANATION SECTION -->
+                    {% if ans.question.explanation %}
+                    <div class="mt-4 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 text-sm space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-900 font-bold">
+                            <i class="fas fa-lightbulb text-amber-500 text-base"></i>
+                            <span>Explanation & Concept</span>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed pl-6">
+                            {{ ans.question.explanation }}
+                        </p>
                     </div>
-                    <p class="text-gray-700 leading-relaxed pt-0.5">
-                        {{ ans.question.explanation }}
-                    </p>
-                </div>
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
+                {% endwith %}
+            {% elif ans.selected_option.is_correct %}
+                {% with item_category='correct' %}
+                <div x-show="filter === 'all' || filter === '{{ item_category }}'"
+                    class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4 transition">
+                    
+                    <!-- Question Header -->
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-900 leading-snug">
+                            <span class="text-indigo-600 font-bold mr-1">Q{{ forloop.counter }}.</span>
+                            {{ ans.question.text }}
+                        </h2>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 whitespace-nowrap">
+                            <i class="fas fa-check-circle text-emerald-500"></i> Correct
+                        </span>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="space-y-2.5">
+                        {% for opt in ans.question.options.all %}
+                        <div class="p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base transition flex items-center justify-between gap-3
+                            {% if opt.is_correct %}
+                                bg-emerald-50 border-emerald-300 text-emerald-900 font-medium
+                            {% else %}
+                                bg-gray-50/70 border-gray-200/70 text-gray-600
+                            {% endif %}">
+                            <div class="flex items-center gap-3">
+                                {% if opt.is_correct %}
+                                <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
+                                {% else %}
+                                <i class="far fa-circle text-gray-300 text-lg"></i>
+                                {% endif %}
+                                <span>{{ opt.text }}</span>
+                            </div>
+                            {% if opt.is_correct %}
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white">
+                                Your Correct Choice
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- EXPLANATION SECTION -->
+                    {% if ans.question.explanation %}
+                    <div class="mt-4 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 text-sm space-y-1.5">
+                        <div class="flex items-center gap-2 text-indigo-900 font-bold">
+                            <i class="fas fa-lightbulb text-amber-500 text-base"></i>
+                            <span>Explanation & Concept</span>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed pl-6">
+                            {{ ans.question.explanation }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                </div>
+                {% endwith %}
+            {% else %}
+                {% with item_category='incorrect' %}
+                <div x-show="filter === 'all' || filter === '{{ item_category }}'"
+                    class="bg-white rounded-3xl p-6 border-2 border-rose-200 shadow-sm space-y-4 transition">
+                    
+                    <!-- Question Header -->
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-900 leading-snug">
+                            <span class="text-indigo-600 font-bold mr-1">Q{{ forloop.counter }}.</span>
+                            {{ ans.question.text }}
+                        </h2>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/60 whitespace-nowrap">
+                            <i class="fas fa-times-circle text-rose-500"></i> Incorrect
+                        </span>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="space-y-2.5">
+                        {% for opt in ans.question.options.all %}
+                        <div class="p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base transition flex items-center justify-between gap-3
+                            {% if opt.is_correct %}
+                                bg-emerald-50 border-emerald-300 text-emerald-900 font-medium
+                            {% elif ans.selected_option == opt %}
+                                bg-rose-50 border-rose-300 text-rose-900 font-medium
+                            {% else %}
+                                bg-gray-50/70 border-gray-200/70 text-gray-600
+                            {% endif %}">
+                            <div class="flex items-center gap-3">
+                                {% if opt.is_correct %}
+                                <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
+                                {% elif ans.selected_option == opt %}
+                                <i class="fas fa-times-circle text-rose-600 text-lg"></i>
+                                {% else %}
+                                <i class="far fa-circle text-gray-300 text-lg"></i>
+                                {% endif %}
+                                <span>{{ opt.text }}</span>
+                            </div>
+                            {% if opt.is_correct %}
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white">
+                                Correct Answer
+                            </span>
+                            {% elif ans.selected_option == opt %}
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-600 text-white">
+                                Your Choice (Wrong)
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- EXPLANATION SECTION -->
+                    {% if ans.question.explanation %}
+                    <div class="mt-4 p-4 rounded-2xl bg-amber-50/70 border border-amber-200/70 text-sm space-y-1.5">
+                        <div class="flex items-center gap-2 text-amber-900 font-bold">
+                            <i class="fas fa-lightbulb text-amber-500 text-base"></i>
+                            <span>Why is this the correct answer?</span>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed pl-6">
+                            {{ ans.question.explanation }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                </div>
+                {% endwith %}
+            {% endif %}
             {% endfor %}
+        </div>
+
+        <!-- FOOTER BACK BUTTON -->
+        <div class="text-center pt-4">
+            <a href="{% url 'home:student-dashboard' %}"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition shadow">
+                <i class="fas fa-th-large"></i> Back to Student Dashboard
+            </a>
         </div>
 
     </div>

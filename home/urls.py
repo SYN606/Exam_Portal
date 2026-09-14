@@ -8,6 +8,7 @@ from .views import (
     LoginView,
     LogoutView,
     SecurityResetPasswordView,
+    StudentDashboardView,
     StudentExamHistoryView,
     StudentExamDetailView,
 )
@@ -27,11 +28,17 @@ urlpatterns = [
         SecurityResetPasswordView.as_view(),
         name="reset-password",
     ),
-    # Student Exam Backtracking Routes
+    # Student Dashboard & Exam Tracking Routes
+    path("dashboard/", StudentDashboardView.as_view(), name="student-dashboard"),
     path("my-history/", StudentExamHistoryView.as_view(), name="exam-history"),
+    path(
+        "dashboard/<int:participant_id>/",
+        StudentExamDetailView.as_view(),
+        name="exam-detail",
+    ),
     path(
         "my-history/<int:participant_id>/",
         StudentExamDetailView.as_view(),
-        name="exam-detail",
+        name="exam-detail-legacy",
     ),
 ]

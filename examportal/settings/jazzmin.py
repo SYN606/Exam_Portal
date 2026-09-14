@@ -12,7 +12,7 @@ JAZZMIN_SETTINGS = {
     "Exam Portal",
 
     # Search & User Menu
-    "search_model": ["exam.Exam", "auth.User"],
+    "search_model": ["exam.Exam", "home.User"],
     "user_avatar":
     None,
 
@@ -41,7 +41,7 @@ JAZZMIN_SETTINGS = {
         "exam.ParticipantAnswer": "fas fa-tasks",
 
         # Core Auth & Django Models
-        "auth.User": "fas fa-user-shield",
+        "home.User": "fas fa-user-shield",
         "auth.Group": "fas fa-users-cog",
     },
 

@@ -163,6 +163,7 @@ class SubmitExamView(LoginRequiredMixin, View):
                 participant.submitted_at = timezone.now()
                 participant.save(
                     update_fields=["is_submitted", "submitted_at"])
+                participant.calculate_score()
 
                 return JsonResponse(
                     {
@@ -173,49 +174,67 @@ class SubmitExamView(LoginRequiredMixin, View):
                 )
 
             answers = data.get("answers", {})
-            answer_qs = (ParticipantAnswer.objects.select_for_update().filter(
+            answer_qs = list(ParticipantAnswer.objects.select_for_update().filter(
                 participant=participant).select_related("question"))
 
-            score = 0.0
-            attempted = 0
-
+            option_ids = []
             for ans in answer_qs:
-                selected_option_id = answers.get(str(ans.question.pk))
+                opt_id = answers.get(str(ans.question_id))
+                if opt_id:
+                    try:
+                        option_ids.append(int(opt_id))
+                    except (ValueError, TypeError):
+                        pass
+
+            options_map = {
+                opt.id: opt
+                for opt in Option.objects.filter(
+                    id__in=option_ids,
+                    question__exam=participant.exam
+                )
+            }
+
+            attempted = 0
+            for ans in answer_qs:
+                selected_option_id = answers.get(str(ans.question_id))
                 if not selected_option_id:
                     continue
 
                 try:
-                    option = Option.objects.get(id=selected_option_id,
-                                                question=ans.question)
-                except Option.DoesNotExist:
+                    opt_id_int = int(selected_option_id)
+                except (ValueError, TypeError):
                     continue
 
-                attempted += 1
-                ans.selected_option = option
-
-                if option.is_correct:
-                    score += float(participant.exam.marks_per_question)
-                else:
-                    score -= float(participant.exam.negative_marks)
+                opt = options_map.get(opt_id_int)
+                if opt and opt.question_id == ans.question_id:
+                    ans.selected_option = opt
+                    attempted += 1
 
             ParticipantAnswer.objects.bulk_update(answer_qs,
                                                   ["selected_option"])
 
-            participant.score = max(0.0, round(score, 2))
             participant.is_submitted = True
             participant.submitted_at = timezone.now()
             participant.save(
-                update_fields=["score", "is_submitted", "submitted_at"])
+                update_fields=["is_submitted", "submitted_at"])
+
+            participant.calculate_score()
+
+            reason = data.get("reason")
+            if reason:
+                messages.warning(request, reason)
+            else:
+                messages.success(request, "Exam submitted successfully!")
 
             return JsonResponse({
                 "message": "submitted",
                 "score": participant.score,
                 "attempted": attempted,
-                "total": answer_qs.count(),
+                "total": len(answer_qs),
             })
 
-        except Exception:
-            return JsonResponse({"error": "Submission failed"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": f"Submission failed: {str(e)}"}, status=400)
 
 
 class ResultPageView(LoginRequiredMixin, DetailView):
@@ -232,8 +251,9 @@ class ResultPageView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         participant = cast(Participant, context["participant"])
-        answers = participant.answers.select_related("question",
-                                                     "selected_option").all()
+        answers = participant.answers.select_related(
+            "question", "selected_option"
+        ).prefetch_related("question__options").all()
         context["answers"] = answers
         context["attempted_questions_count"] = answers.filter(
             selected_option__isnull=False).count()

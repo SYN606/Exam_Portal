@@ -1,11 +1,16 @@
 import os
 from .base import *
 
+from django.core.exceptions import ImproperlyConfigured
+
 SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured("The SECRET_KEY environment variable must be set in production.")
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+raw_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = [host.strip() for host in raw_allowed_hosts.split(',') if host.strip()]
 
 # Configure production database (e.g., PostgreSQL or SQLite from ENV)
 DATABASES = {

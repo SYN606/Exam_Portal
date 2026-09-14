@@ -108,7 +108,7 @@ class Participant(models.Model):
 
         answers = self.answers.select_related("selected_option")
         all_questions_count = self.exam.questions.count()
-        answered_q_ids = set(answers.values_list("question_id", flat=True))
+        answered_q_ids = set(answers.filter(selected_option__isnull=False).values_list("question_id", flat=True))
 
         for answer in answers:
             if answer.selected_option and answer.selected_option.is_correct:
@@ -121,9 +121,11 @@ class Participant(models.Model):
         self.total_correct = correct
         self.total_wrong = wrong
         self.total_unanswered = unanswered
-        self.score = (correct * self.exam.marks_per_question) - (
-            wrong * self.exam.negative_marks)
-        self.save()
+        self.score = max(0.0, round((correct * self.exam.marks_per_question) - (
+            wrong * self.exam.negative_marks), 2))
+        self.save(update_fields=[
+            "total_correct", "total_wrong", "total_unanswered", "score"
+        ])
 
 
 class ParticipantAnswer(models.Model):
